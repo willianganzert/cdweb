@@ -1,0 +1,20 @@
+<div class="container">
+	<div class="card card-user-container">
+		<h3 class="cad cad-title">Lista Usuários</h3>
+		<div class="span6">
+   
+            <div>Nome </div>  <div>Email</div><a>
+             <a ng-click="editUser(user.id)" class="btn btn-success">edit</a>
+             <a ng-click="deleteUser(user.id)" class="btn btn-success">delete</a>
+             </a>
+           
+              <tr ng-repeat="user in users">
+            <td>{{ user.nome }}</td>
+            <td>{{ user.login }}</td>
+           
+           
+
+</div>
+</div>
+    <a ng-click="createNewUser()" class="btn btn-small">create new user</a>
+</div>

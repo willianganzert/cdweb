@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html ng-app="cdweb">
+<head>
+<meta charset="UTF-8">
+<title>CDWEB</title>
+	<!--CDWEB!-->
+	<link rel="stylesheet" href="css/cdweb/style.css" type="text/css">
+
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/log.css">
+	<!--AngularJS!-->
+</head>
+<body>
+<div class="wrapper">
+	<div class="header-bar  centered" ng-if="$root.headersadassa">
+		<div class="header content clearfix">
+			<span>
+			<img src="./img/blue-home-icon.png" alt="Windows"	width="56" margin="20" />
+			SoftHome
+			</span>
+		</div>
+	</div>
+	<div class="main content clearfix" ng-view>
+
+	</div>
+	<div class="footer-bar" ng-if="footer">
+		<div class="footer content clearfix">
+
+		</div>
+	<div class="sooter-bar" ng-if="footer">
+		<div class="footer content clearfix">
+
+		</div>
+	</div>
+</div>
+</body>
+<!--ANGULARJS!-->
+<script type="application/javascript" src="js/angular/angular.js"></script>
+<script type="application/javascript" src="js/angular/angular-animate.js"></script>
+<script type="application/javascript" src="js/angular/angular-aria.js"></script>
+<script type="application/javascript" src="js/angular/angular-cookies.js"></script>
+<script type="application/javascript" src="js/angular/angular-loader.js"></script>
+<script type="application/javascript" src="js/angular/angular-messages.js"></script>
+<script type="application/javascript" src="js/angular/angular-resource.js"></script>
+<script type="application/javascript" src="js/angular/angular-route.js"></script>
+<script type="application/javascript" src="js/angular/angular-sanitize.js"></script>
+<script type="application/javascript" src="js/angular/angular-scenario.js"></script>
+<script type="application/javascript" src="js/angular/angular-locale_pt-br.js"></script>
+<script type="application/javascript" src="js/bootstrap.min.js"></script>
+
+<script type="application/javascript" src="js/ui-bootstrap/ui-bootstrap-tpls-0.14.3.js"></script>
+
+
+
+<!--CDWEB!-->
+<script type="application/javascript" src="js/cdweb/cdweb.js"></script>
+<script type="application/javascript" src="js/cdweb/controllers.js"></script>
+<script type="application/javascript" src="js/cdweb/routes.js"></script>
+<script type="application/javascript" src="js/cdweb/service.js"></script>
+
+
+<script type="application/javascript" src="js/cdweb/modulos/configuracao.js"></script>
+</html>

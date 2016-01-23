@@ -1,0 +1,34 @@
+<div class="container">
+	<div class="card card-user-container">
+		<h3 class="cad cad-title">Cadastro de Usuário</h3>
+
+
+		<div>
+			<form>
+
+				<label for="name">Nome:</label> <input type="text"
+					class="form-control" size="40" id="name" ng-model="user.nome" /> <label
+					for="email">Email:</label> <input type="email" class="form-control"
+					size="40" id="email" ng-model="user.login" />
+				<!--<img src="usuario.png" align="right" alt="Windows" width="150"/>-->
+				<label for="name">Senha:</label> <input type="password"
+					class="form-control" size="40" name="pass" ng-model="user.senha">
+				<!--         <label for="passconfirm">Confirme a senha: </label> -->
+				<!--         <input type="password" id="passconfirm" class="form-control"size="40" name="pass"> -->
+				<label for="phonenum">Número de telefone:</label> <input
+					pattern="^[\d]+$" id="phonenum" class="form-control" type="tel"
+					ng-model="user.telefone">
+				<p>
+				<p>
+					<input type="reset" value="Salvar" class="btn btn-success"
+						ng-click="gravar()"> <input type="reset" value="Cancelar"
+						class="btn btn-success" ng-click="cancelar()">
+
+
+				</p>
+
+			</form>		
+
+		</div>
+	</div>
+</div>

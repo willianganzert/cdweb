@@ -1,0 +1,51 @@
+
+<div class="card card-dis-container">
+    <h3 class="cad conf-title">
+        Modelo de Dispositivos
+    </h3>
+       <div>
+       <div>Dispositivo Config: </div>
+       <select ng-options="item as item.nome for item in dispositivos" ng-model="modelo.dispositivo"> 
+       </select>
+<!--        {{modelo.dispositivo}} -->
+    </div>
+
+    <div>
+       <div> Nome Dispositivo: </div>
+        <input type="text" name="nome" ng-model="modelo.nome">
+    </div>
+<p>
+
+<div>
+       <div>Nome Ação:</div>
+        <input type="text" name="descricao" ng-model="modeloacao.nome">
+        
+    </div>
+      <div>
+       <div>Descrição Ação</div>
+        <input type="text" name="descricao" ng-model="modeloacao.descricao">
+        
+    </div>
+<p>
+      
+    <div> Parametro do Dispositivo: </div>
+    <div>
+        Ligado:
+
+        <select>
+            <option>Sim</option>
+            <option>Nao</option>
+        </select>
+        {{parametros}}
+    </div>
+    <p>
+    <p>
+    <p>
+        <button type="submit" class="btn btn-success">Novo</button>
+        <button type="submit" class="btn btn-success" ng-click="gravar()">Salvar</button>
+        <input type="reset" value="Limpar" class="btn btn-warning">
+
+
+
+ </div>
+
