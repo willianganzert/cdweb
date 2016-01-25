@@ -10,7 +10,8 @@ public class ConfigurationTest extends TestCase {
 //
 	}
 //	@Test
-	public void testeGetIp() {
+	public void testeGetIp() throws ClassNotFoundException {
+		Class.forName("javax.servlet.Servlet");
 //		String ip = configuration.getIP();
 //		assertNotNull("IP NULO", ip);
 	}

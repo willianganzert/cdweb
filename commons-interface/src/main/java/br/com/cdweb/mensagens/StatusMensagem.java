@@ -10,38 +10,78 @@ public enum StatusMensagem {
 	/**
 	 * Pendente no [Servidor Externo]
 	 */
-	T,
+	Q,
+	
 	/**
 	 * Em Processamento [Servidor Externo]
 	 */
-	D,
+	W,
+	
 	/**
-	 * Pendente de Avaliação [Servidor Interno]
+	 * Erro [Servidor Externo]
 	 */
-	A,
+	E,
+	
+	/**
+	 * Processada [Servidor Externo]
+	 */
+	R,
+	
+	
+	
 	/**
 	 * Pendente de processamento [Servidor Interno]
 	 */
-	P,
+	S,
+	
 	/**
 	 * Em processamento [Servidor Interno]
 	 */
-	R,
+	D,
+	
 	/**
 	 * Erro [Servidor Interno]
 	 */
-	E,
+	F,
+	
 	/**
 	 * Processada [Servidor Interno]
 	 */
-	K;
+	G;
 	
-	public StatusMensagem getStatusPendenteServer(int tipoServer){
-		if(tipoServer == 0){
-			return P;
+	public static StatusMensagem pendente(){
+		if(IdentificadorAplicacao.INSTANCE.isServer()){
+			return Q;
 		}
 		else {
-			return T; 
+			return S; 
+		}
+	}
+	
+	public static StatusMensagem processando(){
+		if(IdentificadorAplicacao.INSTANCE.isServer()){
+			return W;
+		}
+		else {
+			return D; 
+		}
+	}
+	
+	public static StatusMensagem processada(){
+		if(IdentificadorAplicacao.INSTANCE.isServer()){
+			return R;
+		}
+		else {
+			return F; 
+		}
+	}
+	
+	public static StatusMensagem erro(){
+		if(IdentificadorAplicacao.INSTANCE.isServer()){
+			return E;
+		}
+		else {
+			return G; 
 		}
 	}
 }

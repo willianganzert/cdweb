@@ -3,10 +3,14 @@ package br.com.cdweb.gestor.fila;
 import java.util.Collections;
 import java.util.List;
 
+import br.com.cdweb.persistence.domain.FilaEventoExecutar;
+import br.com.cdweb.processos.RecebeEvento;
+
 public abstract class Fila<T> {
 	private String tipoFila;
 	private List<T> listaFilaMemoria = null;
 	private T item = null;
+	protected boolean configurado = false;
 	
 	public Fila(String tipoFila) {
 		this.tipoFila = tipoFila;
@@ -21,6 +25,13 @@ public abstract class Fila<T> {
 	protected abstract void gravarSucesso(T item2);
 	protected abstract void adicionarImp(T item2);
 	protected abstract void removerImp(T item2);
+	
+	public abstract void configurarEncaminhar(RecebeEvento<FilaEventoExecutar> recebeEvento);
+	
+	public boolean isConfigurado() {
+		return configurado;
+	}
+	
 
 	private void carregaListaFilaMemoria(){
 		List<T> listaCarregada = carregarLista();

@@ -12,8 +12,8 @@ public class GestorTest {
 	ExecutorService exe = Executors.newFixedThreadPool(2);
 	@Test
 	public void test() {
-		GestorFila gestorFila = new GestorFila(FilaEvento.getInstance());
-		exe.submit(gestorFila);
+//		GestorFila gestorFila = new GestorFila(FilaExecucao.getInstance());
+//		exe.submit(gestorFila);
 		
 		
 	}

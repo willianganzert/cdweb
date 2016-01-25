@@ -15,7 +15,10 @@
 	<modules>
 		<module>../persistence</module>
 		<module>../commons-interface</module>
-		<module>../ServerExt_CDWEB</module>
+		
+		
+		<module>../gestor</module>
+		<module>../server</module>
 	</modules>
 	<build>
 		<plugins>

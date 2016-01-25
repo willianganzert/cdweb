@@ -29,7 +29,7 @@ public class AcaoService {
 			Usuario usuario = getUsuarioSessao(req);
 			FilaEventoExecutar eventoExecutar = new FilaEventoExecutar();
 			eventoExecutar.setModeloAcao(modeloAcao);
-			eventoExecutar.setStatus(StatusMensagem.A);
+			eventoExecutar.setStatus(StatusMensagem.pendente());
 			eventoExecutar.setUsuario(usuario);
 			JpaAllEntities.insert(eventoExecutar);
 			requisicao.setStatusOK();
