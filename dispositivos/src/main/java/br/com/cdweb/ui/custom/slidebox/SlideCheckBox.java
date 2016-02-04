@@ -33,7 +33,7 @@ public class SlideCheckBox extends CheckBox {
     }
     public SlideCheckBox(final String TEXT) {
         super(TEXT);
-        getStylesheets().add(getClass().getResource("slidecheckbox.css").toExternalForm());
+        getStylesheets().add(getClass().getClassLoader().getResource("slidecheckbox.css").toExternalForm());
         setSkin(new SlideCheckBoxSkin(this));
     }
 }

@@ -19,17 +19,18 @@ public class FilaEvento extends Fila<FilaEventoExecutar> implements RecebeEvento
 		super(FilaEvento.class.getName());
 	}
 
-	public static FilaEvento getInstance() {
+	public static FilaEvento getInstance( RecebeEvento<FilaEventoExecutar> recebeEvento) {
 		if (INSTANCE == null) {
 			INSTANCE = new FilaEvento();
 		}
+		INSTANCE.configurarEncaminhar(recebeEvento);
 		return INSTANCE;
 	}
 
 	@Override
 	protected List<FilaEventoExecutar> carregarLista() {
 		ResultFilterVo<FilaEventoExecutar> resultFilterVo = JpaAllEntities.doFilter(FilaEventoExecutar.class,
-				new FieldValuesVo("tipo", TIPO));
+				new FieldValuesVo("tipo", TIPO),new FieldValuesVo("status", StatusMensagem.pendente()));
 		return resultFilterVo.getResultQuery();
 	}
 
@@ -38,7 +39,12 @@ public class FilaEvento extends Fila<FilaEventoExecutar> implements RecebeEvento
 		JpaAllEntities.merge(item);
 		item.setStatus(StatusMensagem.processando());
 		JpaAllEntities.update(item);
-		recebeEventoEncaminhar.recebeEvento(item);
+		FilaEventoExecutar itemClone = (FilaEventoExecutar) item.clone();
+		itemClone.setIdFilaEventoExecutar(0);
+		recebeEventoEncaminhar.recebeEvento(itemClone);
+		JpaAllEntities.merge(item);
+		item.setStatus(StatusMensagem.processada());
+		JpaAllEntities.update(item);
 		return true;
 	}
 
@@ -59,7 +65,8 @@ public class FilaEvento extends Fila<FilaEventoExecutar> implements RecebeEvento
 	@Override
 	protected void adicionarImp(FilaEventoExecutar item2) {
 		item2.setTipo(TIPO);
-		JpaAllEntities.update(item2);
+		item2.setStatus(StatusMensagem.pendente());
+		JpaAllEntities.insertOrUpdate(item2);
 	}
 
 	@Override

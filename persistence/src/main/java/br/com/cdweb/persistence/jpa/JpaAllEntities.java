@@ -176,6 +176,7 @@ public class JpaAllEntities {
     		
     		em = EntityManagerHelper.getEntityManager();
     		q = em.createQuery(sb.toString(),entity);
+    		q.setHint("eclipselink.refresh", "true");
     		setParams(q, fieldValuesVos);
     		
     		if(firstResult !=null)

@@ -43,6 +43,7 @@ public abstract class Fila<T> {
 		}
 	}
 	protected T proximo(){
+		item = null;
 		if(listaFilaMemoria.size() > 0){
 			item = listaFilaMemoria.get(0);		
 		}
@@ -75,8 +76,8 @@ public abstract class Fila<T> {
 	}
 	
 	public void adicionar(T item2) {
+		adicionarImp(item2);
 		listaFilaMemoria.add(item2);
-		removerImp(item2);
 	}
 	
 }

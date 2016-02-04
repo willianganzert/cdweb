@@ -4,6 +4,7 @@ import java.util.List;
 
 import br.com.cdweb.dispositivos.processos.ControladorComunicacaoProxy;
 import br.com.cdweb.gestor.fila.Fila;
+import br.com.cdweb.gestor.fila.FilaEvento;
 import br.com.cdweb.mensagens.StatusMensagem;
 import br.com.cdweb.persistence.domain.FilaEventoExecutar;
 import br.com.cdweb.persistence.domain.FilaEventoExecutar.TIPO;
@@ -17,28 +18,36 @@ public class FilaExecucao extends Fila<FilaEventoExecutar> implements RecebeEven
 	private static FilaExecucao INSTANCE;
 	private RecebeEvento<FilaEventoExecutar> recebeEventoEncaminhar;
 
-	private FilaExecucao(RecebeEvento<FilaEventoExecutar> recebeEvento) {
+	private FilaExecucao() {
 		super(FilaExecucao.class.getName());
-		recebeEventoEncaminhar = recebeEvento;
 	}
 
-	public static FilaExecucao getInstance() {
+	public static FilaExecucao getInstance( RecebeEvento<FilaEventoExecutar> recebeEvento) {
 		if (INSTANCE == null) {
-			INSTANCE = new FilaExecucao(ControladorComunicacaoProxy.getInstance());
+			INSTANCE = new FilaExecucao();
 		}
+		INSTANCE.configurarEncaminhar(recebeEvento);
 		return INSTANCE;
 	}
 
 	@Override
 	protected List<FilaEventoExecutar> carregarLista() {
 		ResultFilterVo<FilaEventoExecutar> resultFilterVo = JpaAllEntities.doFilter(FilaEventoExecutar.class,
-				new FieldValuesVo("tipo", TIPO));
+				new FieldValuesVo("tipo", TIPO),new FieldValuesVo("status", StatusMensagem.S));
 		return resultFilterVo.getResultQuery();
 	}
 
 	@Override
 	protected boolean encaminhar(FilaEventoExecutar item) {
-		recebeEventoEncaminhar.recebeEvento(item);
+		JpaAllEntities.merge(item);
+		item.setStatus(StatusMensagem.D);
+		JpaAllEntities.update(item);
+		FilaEventoExecutar itemClone = (FilaEventoExecutar) item.clone();
+		itemClone.setIdFilaEventoExecutar(0);
+		recebeEventoEncaminhar.recebeEvento(itemClone);
+		JpaAllEntities.merge(item);
+		item.setStatus(StatusMensagem.G);
+		JpaAllEntities.update(item);
 		return true;
 	}
 
@@ -59,6 +68,7 @@ public class FilaExecucao extends Fila<FilaEventoExecutar> implements RecebeEven
 	@Override
 	protected void adicionarImp(FilaEventoExecutar item2) {
 		item2.setTipo(TIPO);
+		item2.setStatus(StatusMensagem.S);
 		JpaAllEntities.update(item2);
 	}
 

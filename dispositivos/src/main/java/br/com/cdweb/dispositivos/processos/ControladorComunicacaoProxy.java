@@ -1,6 +1,7 @@
 package br.com.cdweb.dispositivos.processos;
 
 import br.com.cdweb.persistence.domain.FilaEventoExecutar;
+import br.com.cdweb.persistence.jpa.JpaAllEntities;
 import br.com.cdweb.processos.RecebeEvento;
 
 public class ControladorComunicacaoProxy implements RecebeEvento<FilaEventoExecutar>{
@@ -19,6 +20,10 @@ public class ControladorComunicacaoProxy implements RecebeEvento<FilaEventoExecu
 	
 	@Override
 	public void recebeEvento(FilaEventoExecutar evento) {
+		System.out.println("==============================================================================================");
+		System.out.println("====================================EXECUTADO EVENTO==========================================");
+		System.out.println("==============================================================================================");
+		System.out.println(evento.getModeloAcao());
 		System.out.println(evento);		
 	}
 

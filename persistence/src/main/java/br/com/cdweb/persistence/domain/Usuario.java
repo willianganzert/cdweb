@@ -28,7 +28,7 @@ public class Usuario  extends ComunEntidades implements Serializable{
 
 	private String login;
 
-	private String senha;
+	transient private String senha;
 	
 	@Column(length=100)
 	private String nome;

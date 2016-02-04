@@ -12,7 +12,7 @@ public class GestorTest {
 	ExecutorService exe = Executors.newFixedThreadPool(2);
 	@Test
 	public void test() throws ClassNotFoundException {
-		Class.forName("javax.servlet.Servlet");
+//		Class.forName("javax.servlet.Servlet");
 //		GestorFila gestorFila = new GestorFila(FilaExecucao.getInstance());
 //		exe.submit(gestorFila);
 		
