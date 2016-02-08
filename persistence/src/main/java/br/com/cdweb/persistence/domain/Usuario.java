@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name="usuario")
@@ -28,7 +29,8 @@ public class Usuario  extends ComunEntidades implements Serializable{
 
 	private String login;
 
-	transient private String senha;
+	@XmlTransient
+	private String senha;
 	
 	@Column(length=100)
 	private String nome;

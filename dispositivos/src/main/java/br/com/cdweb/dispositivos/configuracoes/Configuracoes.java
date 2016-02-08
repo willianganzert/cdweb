@@ -5,6 +5,8 @@
  */
 package br.com.cdweb.dispositivos.configuracoes;
 
+import br.com.cdweb.dispositivos.configuracoes.conexao.StatusConexao;
+
 /**
  *
  * @author Willian
@@ -12,9 +14,13 @@ package br.com.cdweb.dispositivos.configuracoes;
 public enum Configuracoes {
     INSTANCE("DISPO_01");
     private String name;
+    private StatusConexao conexaoServerWIFI;
+    private StatusConexao conexaoServerWEB;
 
     private Configuracoes(String name) {
         this.name = name;
+        conexaoServerWIFI = StatusConexao.DESCONECTADO;
+        conexaoServerWEB = StatusConexao.DESCONECTADO;
     }
 
     public void setName(String name) {
@@ -24,6 +30,27 @@ public enum Configuracoes {
     public String getName() {
         return name;
     }
+
+	public StatusConexao getConexaoServerWIFI() {
+		return conexaoServerWIFI;
+	}
+
+	public void setConexaoServerWIFI(StatusConexao conexaoServerWIFI) {
+		this.conexaoServerWIFI = conexaoServerWIFI;
+	}
+
+	public StatusConexao getConexaoServerWEB() {
+		return conexaoServerWEB;
+	}
+
+	public void setConexaoServerWEB(StatusConexao conexaoServerWEB) {
+		this.conexaoServerWEB = conexaoServerWEB;
+	}
+	
+	public void informarServerWEBOffline(){
+		this.conexaoServerWEB = StatusConexao.DESCONECTADO;
+	}
+
     
     
 }

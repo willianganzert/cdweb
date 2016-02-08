@@ -125,7 +125,7 @@ public class SlideCheckBoxSkin extends LabeledSkinBase<SlideCheckBox, SlideCheck
         final double xOffset         = computeXOffset(w, labelWidth + BOX_WIDTH, checkBox.getAlignment().getHpos()) + x;
         final double yOffset         = computeYOffset(h, maxHeight, checkBox.getAlignment().getVpos()) + x;
 
-        layoutLabelInArea(xOffset + BOX_WIDTH, yOffset, labelWidth, maxHeight, checkBox.getAlignment());
+        layoutLabelInArea(xOffset + BOX_WIDTH, yOffset, labelWidth +200, maxHeight, checkBox.getAlignment());
         thumb.resize(THUMB_WIDTH, THUMB_HEIGHT);
         box.resize(BOX_WIDTH, BOX_HEIGHT);
         positionInArea(box, xOffset, yOffset, BOX_WIDTH, maxHeight, 0, checkBox.getAlignment().getHpos(), checkBox.getAlignment().getVpos());

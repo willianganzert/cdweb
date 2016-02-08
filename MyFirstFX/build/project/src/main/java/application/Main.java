@@ -2,14 +2,12 @@ package application;
 	
 import eu.hansolo.fx.SlideCheckBox;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.CheckBox;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -17,17 +15,19 @@ import javafx.stage.Stage;
 public class Main extends Application {
 	@Override
 	public void start(Stage stage) {
-		stage.setTitle("ComboBoxSample");
-	    
-	    Button button = new Button("Send");
-	    Label notification = new Label();
-	    TextField subject = new TextField("");
-	    TextArea text = new TextArea("");
-	    
-	    Scene scene = new Scene(new Group(), 450, 250);
+//		stage.initStyle(StageStyle.TRANSPARENT);
 
-	    ComboBox emailComboBox = new ComboBox();
-	    ComboBox priorityComboBox = new ComboBox();
+		stage.setTitle("CDWEB Dispositivos");
+	    
+//	    Button button = new Button("Send");
+//	    Label notification = new Label();
+//	    TextField subject = new TextField("");
+//	    TextArea text = new TextArea("");
+//	    
+	    Scene scene = new Scene(new Group(), 350, 400);
+
+//	    ComboBox emailComboBox = new ComboBox();
+//	    ComboBox priorityComboBox = new ComboBox();
 
 	    GridPane grid = new GridPane();
 	    grid.setVgap(4);
@@ -47,13 +47,40 @@ public class Main extends Application {
 //	    grid.add(text, 0, 2, 4, 1);
 //	    grid.add(button, 0, 3);
 //	    grid.add(notification, 1, 3, 3, 1);
+	    SlideCheckBox slideCheckBoxGestorEventos = new SlideCheckBox("Gestor Eventos");
+	    slideCheckBoxGestorEventos.setId("gestorEventos");
 	    
-	    grid.add(new SlideCheckBox("Gestor: "), 0, 5,2,0);
+	    SlideCheckBox slideCheckBoxGestorExecucao = new SlideCheckBox("Gestor Execução");
+	    slideCheckBoxGestorExecucao.setId("gestorExecucao");
+	    
+	    
+	    EventHandler eventHandler = new EventHandler<ActionEvent>() {
+	        @Override
+	        public void handle(ActionEvent event) {
+	            if (event.getSource() instanceof CheckBox) {
+	                CheckBox chk = (CheckBox) event.getSource();
+	                System.out.println("Action performed on checkbox " + chk.getText());
+	                if ("gestorEventos".equals(chk.getId())) {
+	                	System.out.println("EVT1");
+	                } else if ("gestorExecucao".equals(chk.getId())) {
+	                	System.out.println("EVT2");
+	                }
+	            }
+	        }
+	    };
+	    
+	    slideCheckBoxGestorEventos.setOnAction(eventHandler);
+	    slideCheckBoxGestorExecucao.setOnAction(eventHandler);
+	    
+	    grid.add(slideCheckBoxGestorEventos,1,1,1,1);
+	    
+	    grid.add(slideCheckBoxGestorExecucao,1,2,1,1);
 	    
 	    Group root = (Group) scene.getRoot();
 	    root.getChildren().add(grid);
 	    stage.setScene(scene);
 	    stage.setHeight(600);
+	    stage.setHeight(400);
 	    stage.show();
 	}
 	

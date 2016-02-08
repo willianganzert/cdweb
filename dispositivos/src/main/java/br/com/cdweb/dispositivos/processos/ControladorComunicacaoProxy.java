@@ -1,7 +1,6 @@
 package br.com.cdweb.dispositivos.processos;
 
 import br.com.cdweb.persistence.domain.FilaEventoExecutar;
-import br.com.cdweb.persistence.jpa.JpaAllEntities;
 import br.com.cdweb.processos.RecebeEvento;
 
 public class ControladorComunicacaoProxy implements RecebeEvento<FilaEventoExecutar>{

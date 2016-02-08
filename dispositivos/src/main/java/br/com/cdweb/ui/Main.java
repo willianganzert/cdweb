@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 
 import br.com.cdweb.Maestro;
+import br.com.cdweb.dispositivos.configuracoes.Configuracoes;
 import br.com.cdweb.ui.custom.slidebox.SlideCheckBox;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -17,13 +18,13 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 
 public class Main extends Application {
 	@Override
 	public void start(Stage stage) throws URISyntaxException, FileNotFoundException {
+		iniciarProcessos();
 		stage.setTitle("CDWEB Dispositivos");
 		Scene scene = new Scene(new Group(), 380, 400);
 
@@ -33,17 +34,71 @@ public class Main extends Application {
 	    grid.setPadding(new Insets(5, 5, 5, 5));
 	    
 	    final Image imgWifiOff = new Image(new FileInputStream(new File(getClass().getClassLoader().getResource(".").toURI().getPath()+"wifi-off.png")),50,50,true,true);
-	    final Image imgInternetOff = new Image(new FileInputStream(new File(getClass().getClassLoader().getResource(".").toURI().getPath()+"internet-off-3.png")),45,45,true,true);
+	    final Image imgWEBOff = new Image(new FileInputStream(new File(getClass().getClassLoader().getResource(".").toURI().getPath()+"internet-off-3.png")),45,45,true,true);
 	    
 	    final Image imgWifiOn = new Image(new FileInputStream(new File(getClass().getClassLoader().getResource(".").toURI().getPath()+"wifi-on.png")),50,50,true,true);
-	    final Image imgInternetOn = new Image(new FileInputStream(new File(getClass().getClassLoader().getResource(".").toURI().getPath()+"internet-on-3.png")),45,45,true,true);
+	    final Image imgWEBOn = new Image(new FileInputStream(new File(getClass().getClassLoader().getResource(".").toURI().getPath()+"internet-on-3.png")),45,45,true,true);
 	    
 	    final ImageView imgViewWifi = new ImageView(imgWifiOff);
-	    final ImageView imgViewInternet = new ImageView(imgInternetOff);
-	    
+	    final ImageView imgViewWEB = new ImageView(imgWEBOff);
+	    new Thread(){
+	    	private int imgWIFI = 0;
+	    	private int imgWEB = 0;
+	    	public void run() {
+	    		while (true) {				
+		    		try {
+						sleep(500);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		    		switch (Configuracoes.INSTANCE.getConexaoServerWIFI()) {
+					case CONECTADO:
+						if(imgWIFI != 1){
+							imgViewWifi.setImage(imgWifiOn);
+							imgWIFI = 1;
+						}
+						break;
+					case CONECTANDO:
+						//invert
+						imgWIFI = imgWIFI == 0?++imgWIFI:--imgWIFI;
+						imgViewWifi.setImage(imgWIFI==0?imgWifiOff:imgWifiOn);
+						
+						break;
+					default:
+						if(imgWIFI != 0){
+							imgViewWifi.setImage(imgWifiOff);
+							imgWIFI = 0;
+						}
+						break;
+					}
+		    		
+		    		switch (Configuracoes.INSTANCE.getConexaoServerWEB()) {
+					case CONECTADO:
+						if(imgWEB != 1){
+							imgViewWEB.setImage(imgWEBOn);
+							imgWEB = 1;
+						}
+						break;
+					case CONECTANDO:
+						//invert
+						imgWEB = imgWEB == 0?++imgWEB:--imgWEB;
+						imgViewWEB.setImage(imgWEB==0?imgWEBOff:imgWEBOn);
+						
+						break;
+					default:
+						if(imgWEB != 0){
+							imgViewWEB.setImage(imgWEBOff);
+							imgWEB = 0;
+						}
+						break;
+					}
+	    		}
+	    	};
+	    }.start();
 	   	    
 	    grid.add(imgViewWifi,2,1,1,1);
-	    grid.add(imgViewInternet,3,1,1,1);
+	    grid.add(imgViewWEB,3,1,1,1);
 //	    Scene scene = new Scene(sp);
 //	    primaryStage.setScene(scene);
 //	    primaryStage.show();
@@ -110,6 +165,10 @@ public class Main extends Application {
 	    stage.show();
 	}
 	
+	private void iniciarProcessos() {
+		Maestro.INSTANCE.iniciarControleStatusConexao();
+	}
+
 	public static void main(String[] args) {
 		launch(args);
 	}

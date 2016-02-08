@@ -6,10 +6,16 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.Base64;
 
+import com.google.gson.Gson;
+
+import br.com.cdweb.conexao.BroadcastMessage;
+
 public class BroadcartNetwork implements Runnable {
 	protected DatagramSocket socket = null;
+	private Gson gson;
 
 	public BroadcartNetwork() throws IOException {
+		gson = new Gson();
 	}
 
 	@Override
@@ -17,8 +23,8 @@ public class BroadcartNetwork implements Runnable {
 		
 		try(DatagramSocket socket = new DatagramSocket(4445);) {
 			byte[] buf = new byte[256];
-			
-			buf = Base64.getEncoder().encode(("{\"cdweb\":{\"ip\":\"" + InetAddress.getLocalHost().getHostAddress()+"\",\"id\":\"rasphome\"}}").getBytes());
+			BroadcastMessage message = new BroadcastMessage("rasphome",InetAddress.getLocalHost().getHostAddress());
+			buf = Base64.getEncoder().encode((gson.toJson(message)).getBytes());
 
 			InetAddress group = InetAddress.getByName("230.0.0.1");
 			DatagramPacket packet;
