@@ -34,7 +34,7 @@ public class WebConection implements Runnable{
 	        String inputLine;
 	        String response = "";
 	        while ((inputLine = in.readLine()) != null){
-	            System.out.println(inputLine);
+//	            System.out.println(inputLine);
 	            response += inputLine;
 	        }
 			MensagemConexao mensagemConexao = gson.fromJson(response, MensagemConexao.class);

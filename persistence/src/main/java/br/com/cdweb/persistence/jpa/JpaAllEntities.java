@@ -172,7 +172,7 @@ public class JpaAllEntities {
     		//sb.append(createOrderBy(orderParametersVo));
     		sb.append(sbOrderArray[1]);
     		
-    		System.out.println("Warning - Query criada antes de setar os valores: " + sb.toString());
+//    		System.out.println("Warning - Query criada antes de setar os valores: " + sb.toString());
     		
     		em = EntityManagerHelper.getEntityManager();
     		q = em.createQuery(sb.toString(),entity);

@@ -26,7 +26,7 @@ public class Main extends Application {
 	public void start(Stage stage) throws URISyntaxException, FileNotFoundException {
 		iniciarProcessos();
 		stage.setTitle("CDWEB Dispositivos");
-		Scene scene = new Scene(new Group(), 380, 400);
+		Scene scene = new Scene(new Group(), 450, 400);
 
 		GridPane grid = new GridPane();
 	    grid.setVgap(4);
@@ -113,7 +113,10 @@ public class Main extends Application {
 	    
 
 	    SlideCheckBox slideCheckBoxGestorBuscaEventos = new SlideCheckBox("Gestor Busca Eventos");
-	    slideCheckBoxGestorExecucao.setId("gestorBuscaEventos");
+	    slideCheckBoxGestorBuscaEventos.setId("gestorBuscaEventos");
+	    
+	    SlideCheckBox slideCheckBoxGestorBuscaEventosExterno = new SlideCheckBox("Gestor Busca Eventos Externo");
+	    slideCheckBoxGestorBuscaEventosExterno.setId("gestorBuscaEventosExterno");
 	    
 	    
 	    EventHandler<ActionEvent> eventHandler = new EventHandler<ActionEvent>() {
@@ -139,23 +142,42 @@ public class Main extends Application {
 	                	
 	                }else if ("gestorBuscaEventos".equals(chk.getId())) {
 	                	if(chk.isSelected()){
-	                		Maestro.INSTANCE.iniciarGestorExecucao();
+	                		Maestro.INSTANCE.iniciarGestorBuscaEventos();;
 	                	}
 	                	else{
-	                		Maestro.INSTANCE.pararGestorExecucao();
+	                		Maestro.INSTANCE.pararGestorBuscaEventos();
 	                	}
 	                	
 	                }
+	                else if ("gestorBuscaEventosExterno".equals(chk.getId())) {
+	                	if(chk.isSelected()){
+	                		Maestro.INSTANCE.iniciarGestorBuscaEventosExterno();
+	                	}
+	                	else{
+	                		Maestro.INSTANCE.pararGestorBuscaEventosExterno();
+	                	}
+	                	
+	                }
+	                
+	                
 	            }
 	        }
 	    };
-	    
+	    slideCheckBoxGestorBuscaEventosExterno.setOnAction(eventHandler);
+	    slideCheckBoxGestorBuscaEventos.setOnAction(eventHandler);
 	    slideCheckBoxGestorEventos.setOnAction(eventHandler);
 	    slideCheckBoxGestorExecucao.setOnAction(eventHandler);
 	    
-	    grid.add(slideCheckBoxGestorEventos,1,2,1,1);
 	    
-	    grid.add(slideCheckBoxGestorExecucao,1,3,1,1);
+	    
+	    
+	    grid.add(slideCheckBoxGestorBuscaEventosExterno,1,2,1,1);
+	    
+	    grid.add(slideCheckBoxGestorBuscaEventos,1,3,1,1);
+	    
+	    grid.add(slideCheckBoxGestorEventos,1,4,1,1);
+	    
+	    grid.add(slideCheckBoxGestorExecucao,1,5,1,1);
 	    
 	    Group root = (Group) scene.getRoot();
 	    root.getChildren().add(grid);

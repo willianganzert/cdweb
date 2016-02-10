@@ -20,10 +20,12 @@ public abstract class Fila<T> {
 
 	
 	protected abstract List<T> carregarLista();	
-	protected abstract boolean encaminhar(T item);	
+	protected abstract boolean encaminhar(T item);
+	protected abstract void emExecucao(T item2);
 	protected abstract void gravarErro(T item2);
 	protected abstract void gravarSucesso(T item2);
 	protected abstract void adicionarImp(T item2);
+	protected abstract void adicionarImp(List<T> item2);
 	protected abstract void removerImp(T item2);
 	
 	public abstract void configurarEncaminhar(RecebeEvento<FilaEventoExecutar> recebeEvento);
@@ -59,6 +61,7 @@ public abstract class Fila<T> {
 	public boolean processar() {
 		boolean sucesso = true;
 		while (proximo()!= null) {
+			emExecucao(item);
 			if(encaminhar(item)){
 				gravarSucesso(item);				
 			}
@@ -79,5 +82,13 @@ public abstract class Fila<T> {
 		adicionarImp(item2);
 		listaFilaMemoria.add(item2);
 	}
+	
+	public void adicionar(List<T> item2) {
+		adicionarImp(item2);
+		listaFilaMemoria.addAll(item2);
+	}
+
+
+	
 	
 }

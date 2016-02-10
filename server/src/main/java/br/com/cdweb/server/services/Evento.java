@@ -1,6 +1,7 @@
 package br.com.cdweb.server.services;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -29,15 +30,20 @@ public class Evento {
 	
 
 	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({MediaType.APPLICATION_JSON })
 	public List<FilaEventoExecutar> getEventos() {
 		List<FilaEventoExecutar> filaEventoExecutars = new ArrayList<FilaEventoExecutar>();
 		ResultFilterVo<FilaEventoExecutar> resultFilterVo = JpaAllEntities.doFilter(FilaEventoExecutar.class, new FieldValuesVo("status", StatusMensagem.pendente()));
 		
 		if(resultFilterVo.getResultQuery() != null && resultFilterVo.getResultQuery().size() > 0){
 			for (FilaEventoExecutar filaEventoExecutar : resultFilterVo.getResultQuery()) {
-				filaEventoExecutars.add((FilaEventoExecutar) filaEventoExecutar.clone());
+				FilaEventoExecutar clone = (FilaEventoExecutar) filaEventoExecutar.clone();
+				clone.setIdFilaEventoExecutar(0);
+				clone.setHoraInsercaoFila(null);
+				filaEventoExecutars.add(clone);
 				JpaAllEntities.merge(filaEventoExecutar);
+				filaEventoExecutar.setNumeroTentativa(filaEventoExecutar.getNumeroTentativa()+1);
+				filaEventoExecutar.setHoraExecucaoEvento(new Date());
 				filaEventoExecutar.setStatus(StatusMensagem.processada());
 			}
 			JpaAllEntities.update(resultFilterVo.getResultQuery().toArray(new FilaEventoExecutar[0]));

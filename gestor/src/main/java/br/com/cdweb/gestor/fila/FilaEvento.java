@@ -1,5 +1,6 @@
 package br.com.cdweb.gestor.fila;
 
+import java.util.Date;
 import java.util.List;
 
 import br.com.cdweb.mensagens.StatusMensagem;
@@ -36,15 +37,11 @@ public class FilaEvento extends Fila<FilaEventoExecutar> implements RecebeEvento
 
 	@Override
 	protected boolean encaminhar(FilaEventoExecutar item) {
-		JpaAllEntities.merge(item);
-		item.setStatus(StatusMensagem.processando());
-		JpaAllEntities.update(item);
 		FilaEventoExecutar itemClone = (FilaEventoExecutar) item.clone();
 		itemClone.setIdFilaEventoExecutar(0);
+		itemClone.setHoraInsercaoFila(null);
+		itemClone.setHoraExecucaoEvento(null);
 		recebeEventoEncaminhar.recebeEvento(itemClone);
-		JpaAllEntities.merge(item);
-		item.setStatus(StatusMensagem.processada());
-		JpaAllEntities.update(item);
 		return true;
 	}
 
@@ -66,12 +63,25 @@ public class FilaEvento extends Fila<FilaEventoExecutar> implements RecebeEvento
 	protected void adicionarImp(FilaEventoExecutar item2) {
 		item2.setTipo(TIPO);
 		item2.setStatus(StatusMensagem.pendente());
+		item2.setHoraInsercaoFila(new Date());
+		item2.setNumeroTentativa(0);
 		JpaAllEntities.insertOrUpdate(item2);
+	}
+	
+	@Override
+	protected void adicionarImp(List<FilaEventoExecutar> item2) {
+		for (FilaEventoExecutar filaEventoExecutar : item2) {
+			filaEventoExecutar.setTipo(TIPO);
+			filaEventoExecutar.setStatus(StatusMensagem.pendente());
+			filaEventoExecutar.setHoraInsercaoFila(new Date());
+			filaEventoExecutar.setNumeroTentativa(0);
+		}
+		JpaAllEntities.insertOrUpdate(item2.toArray(new FilaEventoExecutar[0]));		
 	}
 
 	@Override
 	protected void removerImp(FilaEventoExecutar item2) {
-		JpaAllEntities.delete(item2);
+//		JpaAllEntities.delete(item2);
 	}
 
 	@Override
@@ -83,5 +93,20 @@ public class FilaEvento extends Fila<FilaEventoExecutar> implements RecebeEvento
 		recebeEventoEncaminhar = recebeEvento;
 		configurado = true;
 	}
+
+	@Override
+	public void recebeEvento(List<FilaEventoExecutar> eventos) {
+		adicionar(eventos);		
+	}
+	
+	@Override
+	protected void emExecucao(FilaEventoExecutar item2) {
+		JpaAllEntities.merge(item2);
+		item2.setNumeroTentativa(item2.getNumeroTentativa()+1);
+		item2.setHoraExecucaoEvento(new Date());
+		item2.setStatus(StatusMensagem.processando());
+		JpaAllEntities.update(item2);		
+	}
+	
 
 }

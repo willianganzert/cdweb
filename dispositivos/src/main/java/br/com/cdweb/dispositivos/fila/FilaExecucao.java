@@ -1,10 +1,9 @@
 package br.com.cdweb.dispositivos.fila;
 
+import java.util.Date;
 import java.util.List;
 
-import br.com.cdweb.dispositivos.processos.ControladorComunicacaoProxy;
 import br.com.cdweb.gestor.fila.Fila;
-import br.com.cdweb.gestor.fila.FilaEvento;
 import br.com.cdweb.mensagens.StatusMensagem;
 import br.com.cdweb.persistence.domain.FilaEventoExecutar;
 import br.com.cdweb.persistence.domain.FilaEventoExecutar.TIPO;
@@ -33,48 +32,56 @@ public class FilaExecucao extends Fila<FilaEventoExecutar> implements RecebeEven
 	@Override
 	protected List<FilaEventoExecutar> carregarLista() {
 		ResultFilterVo<FilaEventoExecutar> resultFilterVo = JpaAllEntities.doFilter(FilaEventoExecutar.class,
-				new FieldValuesVo("tipo", TIPO),new FieldValuesVo("status", StatusMensagem.S));
+				new FieldValuesVo("tipo", TIPO),new FieldValuesVo("status", StatusMensagem.pendente()));
 		return resultFilterVo.getResultQuery();
 	}
 
 	@Override
 	protected boolean encaminhar(FilaEventoExecutar item) {
-		JpaAllEntities.merge(item);
-		item.setStatus(StatusMensagem.D);
-		JpaAllEntities.update(item);
 		FilaEventoExecutar itemClone = (FilaEventoExecutar) item.clone();
 		itemClone.setIdFilaEventoExecutar(0);
+		itemClone.setHoraInsercaoFila(null);
+		itemClone.setHoraExecucaoEvento(null);
 		recebeEventoEncaminhar.recebeEvento(itemClone);
-		JpaAllEntities.merge(item);
-		item.setStatus(StatusMensagem.G);
-		JpaAllEntities.update(item);
 		return true;
 	}
 
 	@Override
 	protected void gravarErro(FilaEventoExecutar item2) {
 		JpaAllEntities.merge(item2);
-		item2.setStatus(StatusMensagem.F);
+		item2.setStatus(StatusMensagem.erro());
 		JpaAllEntities.update(item2);
 	}
 
 	@Override
 	protected void gravarSucesso(FilaEventoExecutar item2) {
 		JpaAllEntities.merge(item2);
-		item2.setStatus(StatusMensagem.G);
+		item2.setStatus(StatusMensagem.processada());
 		JpaAllEntities.update(item2);
 	}
 
 	@Override
 	protected void adicionarImp(FilaEventoExecutar item2) {
 		item2.setTipo(TIPO);
-		item2.setStatus(StatusMensagem.S);
-		JpaAllEntities.update(item2);
+		item2.setStatus(StatusMensagem.pendente());
+		item2.setHoraInsercaoFila(new Date());
+		item2.setNumeroTentativa(0);
+		JpaAllEntities.insertOrUpdate(item2);
+	}
+	@Override
+	protected void adicionarImp(List<FilaEventoExecutar> item2) {
+		for (FilaEventoExecutar filaEventoExecutar : item2) {
+			filaEventoExecutar.setTipo(TIPO);
+			filaEventoExecutar.setStatus(StatusMensagem.pendente());
+			filaEventoExecutar.setHoraInsercaoFila(new Date());
+			filaEventoExecutar.setNumeroTentativa(0);
+		}
+		JpaAllEntities.insertOrUpdate(item2.toArray(new FilaEventoExecutar[0]));		
 	}
 
 	@Override
 	protected void removerImp(FilaEventoExecutar item2) {
-		JpaAllEntities.delete(item2);
+//		JpaAllEntities.delete(item2);
 	}
 
 	@Override
@@ -86,4 +93,20 @@ public class FilaExecucao extends Fila<FilaEventoExecutar> implements RecebeEven
 		recebeEventoEncaminhar = recebeEvento;
 		configurado = true;
 	}
+
+	@Override
+	public void recebeEvento(List<FilaEventoExecutar> eventos) {
+		adicionar(eventos);		
+	}
+
+	@Override
+	protected void emExecucao(FilaEventoExecutar item2) {
+		JpaAllEntities.merge(item2);
+		item2.setNumeroTentativa(item2.getNumeroTentativa()+1);
+		item2.setHoraExecucaoEvento(new Date());
+		item2.setStatus(StatusMensagem.processando());
+		JpaAllEntities.update(item2);		
+	}
+
+	
 }
