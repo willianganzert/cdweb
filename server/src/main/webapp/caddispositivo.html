@@ -1,0 +1,48 @@
+<div class="card card-dis-container">
+    <div ng-if="ctrl.recordID != undefined">
+        <form name="form_dispositivo" ng-submit="ctrl.dispositivo.save()">
+            <h3 class="cad conf-title">
+                Cadastro de Dispositivos
+            </h3>
+            <div class="form-group">
+                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                    <div class="btn-group pull-left" role="group" aria-label="First group">
+                        <a class="btn btn-default glyphicon glyphicon-arrow-left" href="#/dispositivo/"></a>
+                    </div>
+                    <div class="btn-group pull-right" role="group" aria-label="First group">
+                        <button type="submit" ng-disabled="!form_dispositivo.$dirty"
+                                class="btn btn-secondary glyphicon glyphicon-floppy-disk"></button>
+                        <div class="btn btn-default glyphicon glyphicon-erase" ng-show="ctrl.dispositivo.editing"
+                             ng-click="ctrl.dispositivo.clear();"></div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="nome">Nome</label>
+                    <input type="text" class="form-control" id="nome" ng-model="ctrl.dispositivo.editing.nome"
+                       ng-disabled="!ctrl.dispositivo.editable">
+            </div>
+
+            <!--<button type="submit" class="btn btn-success">Novo</button>-->
+            <!--<button type="submit" class="btn btn-success">Salvar</button>-->
+            <!--<button type="button" class="btn btn-warning" ng-click="ctrl.dispositivo.save()">Limpar</button>-->
+        </form>
+    </div>
+    <div ng-if="ctrl.recordID === undefined" class="container-fluid">
+        <div class="row">
+            <a ng-href="#/dispositivo/0" class="btn btn-success">Novo registro</a>
+            <p></p>
+            <table ng-table="ctrl.dispositivoTable" style="position: relative"
+                   class=" table table-condensed table-bordered table-striped table-hover">
+                <tr ng-repeat="row in $data" style="cursor:pointer" ng-click="$root.go('/dispositivo/'+row.idDispositivo)">
+                    <td data-title="'ID'" header-class="'col-md-2'" class="text-center">{{row.idDispositivo}}</td>
+                    <td data-title="'Nome'" header-class="'col-md-10'" class="text-center">{{row.nome}}</td>
+
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+</div>

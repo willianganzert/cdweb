@@ -15,29 +15,32 @@
         <input type="text" name="nome" ng-model="modelo.nome">
     </div>
 <p>
+       <p>
+    <p>
 
+
+    <h3 class="cad conf-title">
+        Modelo de Ação
+    </h3>
+
+    <div>Nome Ação:</div>
+    <input type="text" name="descricao" ng-model="modeloacao.nome">
+
+    <div>Descrição Ação:</div>
+    <input type="text" name="descricao" ng-model="modeloacao.descricao">
+
+
+<div> Parametro do Dispositivo: </div>
 <div>
-       <div>Nome Ação:</div>
-        <input type="text" name="descricao" ng-model="modeloacao.nome">
-        
-    </div>
-      <div>
-       <div>Descrição Ação</div>
-        <input type="text" name="descricao" ng-model="modeloacao.descricao">
-        
-    </div>
-<p>
-      
-    <div> Parametro do Dispositivo: </div>
-    <div>
-        Ligado:
+    Ligado:
 
-        <select>
-            <option>Sim</option>
-            <option>Nao</option>
-        </select>
-        {{parametros}}
-    </div>
+    <select>
+        <option>Sim</option>
+        <option>Nao</option>
+    </select>
+    {{parametros}}
+</div>
+    <p>
     <p>
     <p>
     <p>
@@ -45,7 +48,4 @@
         <button type="submit" class="btn btn-success" ng-click="gravar()">Salvar</button>
         <input type="reset" value="Limpar" class="btn btn-warning">
 
-
-
- </div>
-
+</div>

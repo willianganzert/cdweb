@@ -1,0 +1,223 @@
+<div class="container-fluid">
+    <div class="row" ng-show="!scheduleCtrl.recordID">
+        <div class="col-md-12">
+            <h3>Agendametos de execução única</h3>
+            <table ng-table="scheduleCtrl.schefuleOneTime"
+                   class="table table-condensed table-bordered table-striped table-hover">
+                <tr ng-repeat="row in $data" ui-sref="schedule({idSchedule: row.idSchedule })" style="cursor:pointer">
+                    <td data-title="'ID'" header-class="'col-md-1'" class=" text-center">{{row.idSchedule}}</td>
+                    <td data-title="'Nome'">{{row.name}}</td>
+                    <td data-title="'Agendado para'" header-class="'col-md-1'" class="text-center">
+                        {{row.startTime|dateTime}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-12">
+            <h3>Agendametos de repetição</h3>
+            <table ng-table="scheduleCtrl.schefuleRepeat"
+                   class="table table-condensed table-bordered table-striped table-hover">
+                <tr ng-repeat="row in $data" ui-sref="schedule({idSchedule: row.idSchedule })" style="cursor:pointer">
+                    <td data-title="'ID'" header-class="'col-md-1'" class="text-center">{{row.idSchedule}}</td>
+                    <td data-title="'Nome'">{{row.name}}</td>
+                    <td data-title="'Iniciado em'" header-class="'col-md-2'" class="text-center">
+                        {{row.startTime|dateTime}}
+                    </td>
+                    <td data-title="'Interv. repetição'" header-class="'col-md-1'">
+                        {{row.intervalRepeat|timePlusDescription:row.timeUnit}}
+                    </td>
+                    <td data-title="'Qtde. Execuções'" header-class="'col-md-1'">{{row.scheduledCount}}</td>
+                    <td data-title="'Ativo'" header-class="'col-md-1'" class="text-center"><input type="checkbox"
+                                                                                                  ng-checked="row.active"
+                                                                                                  disabled="disabled"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row col-lg-6" ng-show="scheduleCtrl.recordID">
+        <form role="form" name="form_schedule" ng-submit="scheduleCtrl.schedule.save()">
+        <div class="form-group">
+            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group" role="group" aria-label="First group">
+                    <button type="submit" ng-disabled="!form_schedule.$dirty" class="btn btn-secondary glyphicon glyphicon-floppy-disk"></button>
+                </div>
+                <!--<div class="btn-group" role="group" aria-label="Second group">-->
+                    <!--<button type="button" class="btn btn-secondary">5</button>-->
+                    <!--<button type="button" class="btn btn-secondary">6</button>-->
+                    <!--<button type="button" class="btn btn-secondary">7</button>-->
+                <!--</div>-->
+                <!--<div class="btn-group" role="group" aria-label="Third group">-->
+                    <!--<button type="button" class="btn btn-secondary">8</button>-->
+                <!--</div>-->
+            </div>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" ng-model="scheduleCtrl.record.active"> Ativo</label>
+        </div>
+        <div class="form-group">
+            <label for="name">Nome</label>
+            <input type="text" class="form-control" id="name" ng-model="scheduleCtrl.record.name"
+                   ng-disabled="!scheduleCtrl.editable">
+        </div>
+        <div class="form-group">
+            <label for="decription">Descrição</label>
+            <textarea type="text" class="form-control" id="decription" ng-model="scheduleCtrl.record.description"
+                      ng-disabled="!scheduleCtrl.editable"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="decription">Periodicidade</label>
+            <uib-tabset class="tab-background">
+                <uib-tab heading="Uma vez" ng-show="scheduleCtrl.editable || scheduleCtrl.record.repeat === false"
+                         active="scheduleCtrl.record.repeat === false" ng-click="scheduleCtrl.record.repeat = false">
+                    <!--<ng-form name="nestedForm">-->
+                    <div class="row">
+                        <div class="form-group" ng-init="popStart = {open:false}">
+                            <label>Iniciar em</label>
+                            <div class="input-group col-sm-4 col-md-4 col-lg-5">
+                                <input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy HH:mm"
+                                       ng-model="scheduleCtrl.record.startTime.date" min-date="minDate"
+                                       ng-required="true" is-open="popStart.open" close-text="Fechar"
+                                       ng-disabled="!scheduleCtrl.editable"
+                                       alt-input-formats="altInputFormats"/>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="popStart.open = true"><i
+                                            class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--</ng-form>-->
+                </uib-tab>
+                <uib-tab heading="Repetir" ng-show="scheduleCtrl.editable || scheduleCtrl.record.repeat === true"
+                         active="scheduleCtrl.record.repeat === true" ng-click="scheduleCtrl.record.repeat = true">
+                    <div class="row">
+                        <div class="form-group" ng-init="popStart = {open:false}">
+                            <label>Iniciar em</label>
+                            <div class="input-group col-sm-4 col-md-4 col-lg-5">
+                                <input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy HH:mm"
+                                       ng-model="scheduleCtrl.record.startTime.date" min-date="minDate"
+                                       ng-required="true" is-open="popStart.open" close-text="Fechar"
+                                       ng-disabled="!scheduleCtrl.editable"
+                                       alt-input-formats="altInputFormats"/>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="popStart.open = true"><i
+                                            class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-init="popEnd = {open:false}">
+                            <label>Finaliza em</label>
+                            <div class="input-group col-sm-4 col-md-4 col-lg-5">
+                                <input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy HH:mm"
+                                       ng-model="scheduleCtrl.record.endTime.date" min-date="minDate"
+                                       ng-required="true" is-open="popEnd.open" close-text="Fechar"
+                                       ng-disabled="!scheduleCtrl.editable"
+                                       alt-input-formats="altInputFormats"/>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="popEnd.open = true"><i
+                                            class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="intervalRepeat">Intervalo</label>
+
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <input type="number" class="form-control" id="intervalRepeat"
+                                           ng-disabled="!scheduleCtrl.editable"
+                                           ng-model="scheduleCtrl.record.intervalRepeat"/>
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control" id="sel1"
+                                            ng-options="item as item|timeUnitDescription:2 for item in scheduleCtrl.timeUnit"
+                                            ng-disabled="!scheduleCtrl.editable"
+                                            ng-model="scheduleCtrl.record.timeUnit">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </uib-tab>
+            </uib-tabset>
+        </div>
+        <div class="form-group">
+            <!--<label for="decription">Parametros</label>-->
+            <div class="panel panel-default">
+                <div class="panel-heading" style="height: 50px;">
+                    <div class="pull-left">
+                        Parametros
+                    </div>
+                    <div class="pull-right">
+
+                        <div class="btn btn-default glyphicon glyphicon-erase" ng-show="scheduleCtrl.param.editing" ng-click="scheduleCtrl.param.clear();"></div>
+                        <div class="btn btn-default glyphicon glyphicon-plus" ng-show="scheduleCtrl.editable && !scheduleCtrl.param.editing" ng-click="scheduleCtrl.param.edit();"></div>
+                        <div class="btn btn-default glyphicon glyphicon-floppy-disk" ng-show="scheduleCtrl.editable && scheduleCtrl.param.editing" ng-click="scheduleCtrl.param.save();"></div>
+                    </div>
+                </div>
+                <div class="panel-body" style="min-height: 350px;" ng-show="scheduleCtrl.param.editing">
+                    <div class="form-group">
+                        <label for="paramOrder">Ordem</label>
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <input type="number" class="form-control" id="paramOrder"
+                                       ng-model="scheduleCtrl.param.editing.paramOrder"
+                                       ng-disabled="!scheduleCtrl.editable"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Tipo Parametro</label>
+                        <div class="form-inline">
+                            <div class="form-group">
+                            <div class="selectContainer">
+                                <select class="form-control" name="size"
+                                        ng-model="scheduleCtrl.param.dataType"
+                                        ng-change="scheduleCtrl.param.changeDataType(scheduleCtrl.param.dataType)"
+                                        ng-disabled="!scheduleCtrl.editable">
+                                    <option ng-repeat="option in scheduleCtrl.dataTypes" value="{{option.value}}">{{option.name}}</option>
+                                    <!--<option value="java.lang.Integer">Inteiro</option>-->
+                                    <!--<option value="java.lang.String">String</option>-->
+                                    <!--<option value="java.lang.Double">Decimal</option>-->
+                                    <!--<option value="org.joda.time.DateTime">Data/Hora</option>-->
+                                    <option value="">Digitar</option>
+                                </select>
+                            </div>
+                                </div>
+                            <div class="form-group">
+                            <input ng-show="!scheduleCtrl.param.dataType" type="text" class="form-control" id="dataType" ng-model="scheduleCtrl.param.editing.dataType"
+                                   ng-disabled="!scheduleCtrl.editable">
+                                </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="paramName">Nome</label>
+                        <input type="text" class="form-control" id="paramName"
+                               ng-model="scheduleCtrl.param.editing.paramName"
+                               ng-disabled="!scheduleCtrl.editable">
+                    </div>
+                    <div class="form-group">
+                        <label for="paramValue">Valor</label>
+                        <textarea class="form-control" id="paramValue" ng-model="scheduleCtrl.param.editing.paramValue"
+                                  ng-disabled="!scheduleCtrl.editable"></textarea>
+                    </div>
+                </div>
+                <table ng-table="" class="table table-condensed table-bordered table-striped table-hover">
+                    <tr ng-repeat="row in scheduleCtrl.record.scheduleParams" ng-click="scheduleCtrl.param.edit(row)">
+                        <td data-title="'ID'" header-class="'col-md-1'" class="text-center">{{row.idScheduleParam}}</td>
+                        <td data-title="'Oderm'" header-class="'col-md-1'" class="text-center">{{row.paramOrder}}</td>
+                        <td data-title="'Tipo Param'" header-class="'col-md-1'" class="text-center">{{row.dataType}}</td>
+                        <td data-title="'Nome'" header-class="'col-md-1'" class="text-center">{{row.paramName}}</td>
+                        <td data-title="'Valor'" class="text-center">{{row.paramValue|limitTo:50}}</td>
+
+                    </tr>
+                </table>
+
+            </div>
+
+        </div>
+        </form>
+    </div>
+</div>

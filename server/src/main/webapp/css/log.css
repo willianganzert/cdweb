@@ -305,7 +305,7 @@ body, html {
     direction: ltr;
     display: block;
     float: none;
-    height:58px;
+    height:12px;
     /*margin-left:38%;*/
     zoom: 1;
     padding-bottom: 2px;
@@ -537,11 +537,11 @@ div.box .button{
 }
 /*barra de progresso*/
 .body {
-    background-color:#ccc !important; /* Apenas para ver a barra melhor, não é necessário */
+    background-color:#ccc !important; /* Apenas para ver a barra melhor, nï¿½o ï¿½ necessï¿½rio */
 }
 
 .div.progress {
-    margin:50px auto; /* Posicionar melhor a barra nesse exemplo, não é necessário */
+    margin:50px auto; /* Posicionar melhor a barra nesse exemplo, nï¿½o ï¿½ necessï¿½rio */
     width:250px;
 }
 

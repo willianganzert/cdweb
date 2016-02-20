@@ -29,13 +29,25 @@ angular.module("cdweb")
                 controller: 'MenuController'
             })
 
+            .when('/dispositivo/:id', {
+                templateUrl: 'caddispositivo.html',
+                controller: 'DispositivoController',
+                controllerAs:"ctrl"
+            })
+
+            .when('/dispositivo', {
+                templateUrl: 'caddispositivo.html',
+                controller: 'DispositivoController',
+                controllerAs:"ctrl"
+            })
+
             .when('/predefinicoes', {
                 templateUrl: 'predefinicoes.html'
             })
             
           
 
-            .when('/dispositivo', {
+            .when('/modelodispositivo/:id', {
                 templateUrl: 'dispositivo.html',
                  controller:'ModeloDispositivoController'
             })

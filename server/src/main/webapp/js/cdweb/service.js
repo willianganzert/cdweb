@@ -11,7 +11,7 @@ var services = angular.module('cdweb');
 //});
 
 services.factory('UserFactory', function ($resource) {
-    return $resource('./rest/usuarios/:id', {}, {
+    return $resource('http://localhost:8080/server/rest/usuarios/:id', {}, {
         show: { method: 'GET' },
         update: { method: 'PUT', params: {id: '@idUsuario'} },
         delete: { method: 'DELETE', params: {id: '@idUsuario'} }
@@ -19,7 +19,7 @@ services.factory('UserFactory', function ($resource) {
 });
 
 services.factory('DispositivoFactory', function ($resource) {
-    return $resource('./rest/dispositivos/:id/:parametros', {}, {
+    return $resource('http://localhost:8080/server/rest/dispositivos/:id/:parametros', {}, {
         get: { method: 'GET',params: {id: '@idDispositivo'}},
         query: { method: 'GET', isArray:true},
         save: { method: 'POST'},
@@ -33,7 +33,7 @@ services.factory('DispositivoFactory', function ($resource) {
 
 
 services.factory('ModeloDispositivoFactory', function ($resource) {
-    return $resource('./rest/modelosdispositivo/:id', {}, {
+    return $resource('http://localhost:8080/server/rest/modelosdispositivo/:id', {}, {
         get: { method: 'GET',params: {id: '@idModeloDispositivo'}},
         query: { method: 'GET', isArray:true},
         save: { method: 'POST'},
@@ -43,7 +43,7 @@ services.factory('ModeloDispositivoFactory', function ($resource) {
 });
 
 services.factory('ModeloAcaoFactory', function ($resource) {
-    return $resource('./rest/modelosacao/:id', {}, {
+    return $resource('http://localhost:8080/server/rest/modelosacao/:id', {}, {
         get: { method: 'GET',params: {id: '@idModeloAcao'}},
         query: { method: 'GET', isArray:true},
         save: { method: 'POST'},
@@ -54,11 +54,21 @@ services.factory('ModeloAcaoFactory', function ($resource) {
 
 
 services.factory('ModeloParametroFactory', function ($resource) {
-    return $resource('./rest/modelosparametro/:id', {}, {
+    return $resource('http://localhost:8080/server/rest/modelosparametro/:id', {}, {
         get: { method: 'GET',params: {id: '@idModeloParametro'}},
         query: { method: 'GET', isArray:true},
         save: { method: 'POST'},
         update: { method: 'PUT', params: {id: '@idModeloParametro'} },
         delete: { method: 'DELETE', params: {id: '@idModeloParametro'} }        
+    })
+});
+
+services.factory('ModeloParametroFactory', function ($resource) {
+    return $resource('http://localhost:8080/server/rest/modelosparametro/:id', {}, {
+        get: { method: 'GET',params: {id: '@idModeloParametro'}},
+        query: { method: 'GET', isArray:true},
+        save: { method: 'POST'},
+        update: { method: 'PUT', params: {id: '@idModeloParametro'} },
+        delete: { method: 'DELETE', params: {id: '@idModeloParametro'} }
     })
 });
