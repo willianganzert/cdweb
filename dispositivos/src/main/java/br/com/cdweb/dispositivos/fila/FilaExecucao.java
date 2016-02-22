@@ -62,6 +62,8 @@ public class FilaExecucao extends Fila<FilaEventoExecutar> implements RecebeEven
 
 	@Override
 	protected void adicionarImp(FilaEventoExecutar item2) {
+		item2.setIdFilaEventoExecutarOrigem(item2.getIdFilaEventoExecutar());
+		item2.setIdFilaEventoExecutar(0);
 		item2.setTipo(TIPO);
 		item2.setStatus(StatusMensagem.pendente());
 		item2.setHoraInsercaoFila(new Date());
@@ -71,6 +73,8 @@ public class FilaExecucao extends Fila<FilaEventoExecutar> implements RecebeEven
 	@Override
 	protected void adicionarImp(List<FilaEventoExecutar> item2) {
 		for (FilaEventoExecutar filaEventoExecutar : item2) {
+			filaEventoExecutar.setIdFilaEventoExecutarOrigem(filaEventoExecutar.getIdFilaEventoExecutar());
+			filaEventoExecutar.setIdFilaEventoExecutar(0);
 			filaEventoExecutar.setTipo(TIPO);
 			filaEventoExecutar.setStatus(StatusMensagem.pendente());
 			filaEventoExecutar.setHoraInsercaoFila(new Date());

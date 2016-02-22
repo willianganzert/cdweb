@@ -41,61 +41,7 @@ public class Main extends Application {
 	    
 	    final ImageView imgViewWifi = new ImageView(imgWifiOff);
 	    final ImageView imgViewWEB = new ImageView(imgWEBOff);
-	    new Thread(){
-	    	private int imgWIFI = 0;
-	    	private int imgWEB = 0;
-	    	public void run() {
-	    		while (true) {				
-		    		try {
-						sleep(500);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-		    		switch (Configuracoes.INSTANCE.getConexaoServerWIFI()) {
-					case CONECTADO:
-						if(imgWIFI != 1){
-							imgViewWifi.setImage(imgWifiOn);
-							imgWIFI = 1;
-						}
-						break;
-					case CONECTANDO:
-						//invert
-						imgWIFI = imgWIFI == 0?++imgWIFI:--imgWIFI;
-						imgViewWifi.setImage(imgWIFI==0?imgWifiOff:imgWifiOn);
-						
-						break;
-					default:
-						if(imgWIFI != 0){
-							imgViewWifi.setImage(imgWifiOff);
-							imgWIFI = 0;
-						}
-						break;
-					}
-		    		
-		    		switch (Configuracoes.INSTANCE.getConexaoServerWEB()) {
-					case CONECTADO:
-						if(imgWEB != 1){
-							imgViewWEB.setImage(imgWEBOn);
-							imgWEB = 1;
-						}
-						break;
-					case CONECTANDO:
-						//invert
-						imgWEB = imgWEB == 0?++imgWEB:--imgWEB;
-						imgViewWEB.setImage(imgWEB==0?imgWEBOff:imgWEBOn);
-						
-						break;
-					default:
-						if(imgWEB != 0){
-							imgViewWEB.setImage(imgWEBOff);
-							imgWEB = 0;
-						}
-						break;
-					}
-	    		}
-	    	};
-	    }.start();
+	    
 	   	    
 	    grid.add(imgViewWifi,2,1,1,1);
 	    grid.add(imgViewWEB,3,1,1,1);
@@ -112,11 +58,76 @@ public class Main extends Application {
 	    slideCheckBoxGestorExecucao.setId("gestorExecucao");
 	    
 
-	    SlideCheckBox slideCheckBoxGestorBuscaEventos = new SlideCheckBox("Gestor Busca Eventos");
+	    final SlideCheckBox slideCheckBoxGestorBuscaEventos = new SlideCheckBox("Gestor Busca Eventos");
 	    slideCheckBoxGestorBuscaEventos.setId("gestorBuscaEventos");
+	    slideCheckBoxGestorBuscaEventos.setDisable(true);
 	    
-	    SlideCheckBox slideCheckBoxGestorBuscaEventosExterno = new SlideCheckBox("Gestor Busca Eventos Externo");
+	    final SlideCheckBox slideCheckBoxGestorBuscaEventosExterno = new SlideCheckBox("Gestor Busca Eventos Externo");
 	    slideCheckBoxGestorBuscaEventosExterno.setId("gestorBuscaEventosExterno");
+	    slideCheckBoxGestorBuscaEventosExterno.setDisable(true);
+	    
+	    
+	    
+	    new Thread(){
+	    	private int imgWIFI = 0;
+	    	private int imgWEB = 0;
+	    	public void run() {
+	    		while (true) {				
+		    		try {
+						sleep(500);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		    		switch (Configuracoes.INSTANCE.getConexaoServerWIFI()) {
+					case CONECTADO:
+						if(imgWIFI != 1){
+							imgViewWifi.setImage(imgWifiOn);
+							imgWIFI = 1;
+							slideCheckBoxGestorBuscaEventos.setDisable(false);
+						}
+						break;
+					case CONECTANDO:
+						//invert
+						imgWIFI = imgWIFI == 0?++imgWIFI:--imgWIFI;
+						imgViewWifi.setImage(imgWIFI==0?imgWifiOff:imgWifiOn);
+						
+						break;
+					default:
+						if(imgWIFI != 0){
+							imgViewWifi.setImage(imgWifiOff);
+							imgWIFI = 0;
+							slideCheckBoxGestorBuscaEventos.setDisable(true);
+						}
+						break;
+					}
+		    		
+		    		switch (Configuracoes.INSTANCE.getConexaoServerWEB()) {
+					case CONECTADO:
+						if(imgWEB != 1){
+							imgViewWEB.setImage(imgWEBOn);
+							imgWEB = 1;
+							slideCheckBoxGestorBuscaEventosExterno.setDisable(false);
+						}
+						break;
+					case CONECTANDO:
+						//invert
+						imgWEB = imgWEB == 0?++imgWEB:--imgWEB;
+						imgViewWEB.setImage(imgWEB==0?imgWEBOff:imgWEBOn);
+						
+						break;
+					default:
+						if(imgWEB != 0){
+							imgViewWEB.setImage(imgWEBOff);
+							imgWEB = 0;
+							slideCheckBoxGestorBuscaEventosExterno.setDisable(true);
+						}
+						break;
+					}
+	    		}
+	    	};
+	    }.start();
+	    
 	    
 	    
 	    EventHandler<ActionEvent> eventHandler = new EventHandler<ActionEvent>() {

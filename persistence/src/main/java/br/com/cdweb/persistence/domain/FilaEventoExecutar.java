@@ -37,6 +37,12 @@ public class FilaEventoExecutar extends ComunEntidades implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "dispositivo_id_dispositivo_seq")
 	@Column(name = "id_fila_evento_executar")
 	private long idFilaEventoExecutar;
+	
+	@Column(name = "id_fila_evento_executar_origem")
+	private long idFilaEventoExecutarOrigem;
+	
+	@Column(name = "id_dispositivo_origem")
+	private long idDispositivoOrigem;
 
 	@JoinColumn(name = "id_modelo_acao")
 	private ModeloAcao modeloAcao;
@@ -77,6 +83,14 @@ public class FilaEventoExecutar extends ComunEntidades implements Serializable {
 	}
 
 	
+
+	public long getIdFilaEventoExecutarOrigem() {
+		return idFilaEventoExecutarOrigem;
+	}
+
+	public void setIdFilaEventoExecutarOrigem(long idFilaEventoExecutarOrigem) {
+		this.idFilaEventoExecutarOrigem = idFilaEventoExecutarOrigem;
+	}
 
 	public ModeloAcao getModeloAcao() {
 		return modeloAcao;

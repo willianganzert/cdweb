@@ -20,7 +20,7 @@ import br.com.cdweb.processos.RecebeEvento;
 public class BuscaEventos implements Runnable{
 	private RecebeEvento<FilaEventoExecutar> encaminhar;
 	private Gson gson;
-	private String URL_SERVICOS = "http://localhost:8080/server/rest";
+	private String URL_SERVICOS = "http://192.168.25.9:8080/server/rest";
 	private String PATH = "evento";
 	public BuscaEventos(RecebeEvento<FilaEventoExecutar> encaminhar,String urlServicos) {
 		this.encaminhar = encaminhar;
