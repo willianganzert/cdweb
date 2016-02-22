@@ -5,6 +5,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import br.com.cdweb.dispositivos.configuracoes.Configuracoes;
 import br.com.cdweb.dispositivos.fila.FilaExecucao;
 import br.com.cdweb.dispositivos.processos.ControladorComunicacaoProxy;
 import br.com.cdweb.dispositivos.processos.conexao.AtualizarStatusConexao;
@@ -43,11 +44,11 @@ public enum Maestro {
 	
 	public void iniciarGestorBuscaEventos(){
 		System.out.println("Iniciando gestor busca eventos");
-		bevt = scheduler.scheduleWithFixedDelay(new BuscaEventos(FilaEvento.getInstance(FilaExecucao.getInstance(null))),0, 3, TimeUnit.SECONDS);
+		bevt = scheduler.scheduleWithFixedDelay(new BuscaEventos(FilaEvento.getInstance(FilaExecucao.getInstance(null)),Configuracoes.INSTANCE.getUrlServicosServidorInterno()),0, 3, TimeUnit.SECONDS);
 	}
 	public void iniciarGestorBuscaEventosExterno(){
 		System.out.println("Iniciando gestor busca eventos externo");
-		bevte = scheduler.scheduleWithFixedDelay(new BuscaEventos(FilaEvento.getInstance(FilaExecucao.getInstance(null)), "http://nerdti.com/server/rest"),0, 3, TimeUnit.SECONDS);
+		bevte = scheduler.scheduleWithFixedDelay(new BuscaEventos(FilaEvento.getInstance(FilaExecucao.getInstance(null)), Configuracoes.INSTANCE.getUrlServicosServidorExterno()),0, 3, TimeUnit.SECONDS);
 	}
 	
 	public void pararGestorEventos(){

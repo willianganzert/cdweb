@@ -8,7 +8,9 @@ import java.util.Base64;
 
 import com.google.gson.Gson;
 
+import br.com.cdweb.conexao.BroadcastMessage;
 import br.com.cdweb.conexao.MensagemConexao;
+import br.com.cdweb.dispositivos.configuracoes.Configuracoes;
 import br.com.cdweb.dispositivos.configuracoes.conexao.ControleLogConexoes;
 
 public class WifiSocket implements Runnable{
@@ -40,7 +42,9 @@ public class WifiSocket implements Runnable{
 			if(received != null){
 				MensagemConexao mensagemConexao = gson.fromJson(received, MensagemConexao.class);
 				if(mensagemConexao.getTipoMensagem().equals(MensagemConexao.TipoMensagem.BROADCAST)){
+					BroadcastMessage broadcastMessage = gson.fromJson(received, BroadcastMessage.class);  
 					ControleLogConexoes.INSTANCE.setHoraUltimaConexaoServerWIFI(System.currentTimeMillis());
+					Configuracoes.INSTANCE.setUrlServicosServidorInterno(broadcastMessage.getIp());
 				}
 			}
 			
