@@ -3,3 +3,4 @@
 RemoteSystemsTempFiles/*
 Servers/*
 */target/*
+server/.idea/*
