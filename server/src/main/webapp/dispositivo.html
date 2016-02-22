@@ -1,51 +1,44 @@
-
 <div class="card card-dis-container">
-    <h3 class="cad conf-title">
-        Modelo de Dispositivos
-    </h3>
-       <div>
-       <div>Dispositivo Config: </div>
-       <select ng-options="item as item.nome for item in dispositivos" ng-model="modelo.dispositivo"> 
-       </select>
-<!--        {{modelo.dispositivo}} -->
+    <div ng-if="ctrl.recordID != undefined">
+        <form name="form_dispositivo" ng-submit="ctrl.dispositivo.save()">
+            <h3 class="cad conf-title">
+                Cadastro de Dispositivos
+            </h3>
+            <div class="form-group">
+                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                    <div class="btn-group pull-left" role="group" aria-label="First group">
+                        <div class="btn btn-default glyphicon glyphicon-arrow-left" ng-click="ctrl.voltarLista()"></div>
+                    </div>
+                    <div class="btn-group pull-right" role="group" aria-label="First group">
+                        <button type="submit" ng-disabled="!form_dispositivo.$dirty"
+                                class="btn btn-secondary glyphicon glyphicon-floppy-disk"></button>
+                        <div class="btn btn-default glyphicon glyphicon-erase" ng-show="ctrl.dispositivo.editing"
+                             ng-click="ctrl.dispositivo.clear();"></div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="nome">Nome</label>
+                    <input type="text" class="form-control" id="nome" ng-model="ctrl.dispositivo.editing.nome"
+                       ng-disabled="!ctrl.dispositivo.editable">
+            </div>
+        </form>
     </div>
+    <div ng-if="ctrl.recordID === undefined" class="container-fluid">
+        <div class="row">
+            <a ng-href="#/dispositivo/0" class="btn btn-success">Novo registro</a>
+            <p></p>
+            <table ng-table="ctrl.dispositivoTable" style="position: relative"
+                   class=" table table-condensed table-bordered table-striped table-hover">
+                <tr ng-repeat="row in $data" style="cursor:pointer" ng-click="$root.go('/dispositivo/'+row.idDispositivo)">
+                    <td data-title="'ID'" header-class="'col-md-2'" class="text-center">{{row.idDispositivo}}</td>
+                    <td data-title="'Nome'" header-class="'col-md-10'" class="text-center">{{row.nome}}</td>
 
-    <div>
-       <div> Nome Dispositivo: </div>
-        <input type="text" name="nome" ng-model="modelo.nome">
+                </tr>
+            </table>
+        </div>
+
     </div>
-<p>
-       <p>
-    <p>
-
-
-    <h3 class="cad conf-title">
-        Modelo de Ação
-    </h3>
-
-    <div>Nome Ação:</div>
-    <input type="text" name="descricao" ng-model="modeloacao.nome">
-
-    <div>Descrição Ação:</div>
-    <input type="text" name="descricao" ng-model="modeloacao.descricao">
-
-
-<div> Parametro do Dispositivo: </div>
-<div>
-    Ligado:
-
-    <select>
-        <option>Sim</option>
-        <option>Nao</option>
-    </select>
-    {{parametros}}
-</div>
-    <p>
-    <p>
-    <p>
-    <p>
-        <button type="submit" class="btn btn-success">Novo</button>
-        <button type="submit" class="btn btn-success" ng-click="gravar()">Salvar</button>
-        <input type="reset" value="Limpar" class="btn btn-warning">
 
 </div>

@@ -30,13 +30,13 @@ angular.module("cdweb")
             })
 
             .when('/dispositivo/:id', {
-                templateUrl: 'caddispositivo.html',
+                templateUrl: 'dispositivo.html',
                 controller: 'DispositivoController',
                 controllerAs:"ctrl"
             })
 
             .when('/dispositivo', {
-                templateUrl: 'caddispositivo.html',
+                templateUrl: 'dispositivo.html',
                 controller: 'DispositivoController',
                 controllerAs:"ctrl"
             })
@@ -47,10 +47,18 @@ angular.module("cdweb")
             
           
 
-            .when('/modelodispositivo/:id', {
-                templateUrl: 'dispositivo.html',
-                 controller:'ModeloDispositivoController'
+            .when('/modelodispositivo', {
+                templateUrl: 'modelodispositivo.html',
+                 controller:'ModeloDispositivoController',
+                controllerAs:"ctrl"
             })
+
+            .when('/modelodispositivo/:id', {
+                templateUrl: 'modelodispositivo.html',
+                controller:'ModeloDispositivoController',
+                controllerAs:"ctrl"
+            })
+
 
 
             .when('/Book/:bookId/ch/:chapterId', {

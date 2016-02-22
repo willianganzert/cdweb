@@ -26,7 +26,7 @@ services.factory('DispositivoFactory', function ($resource) {
         update: { method: 'PUT', params: {id: '@idDispositivo'} },
         delete: { method: 'DELETE', params: {id: '@idDispositivo'} },
         getParametros: { method: 'POST',
-        	url:'./rest/dispositivos/:id/parametros',
+        	url:'http://localhost:8080/server/rest/dispositivos/:id/parametros',
         	params: {id: '@idDispositivo'}, isArray:true},
     })
 });

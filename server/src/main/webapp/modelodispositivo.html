@@ -1,0 +1,98 @@
+<div class="card card-dis-container">
+    <h3 class="cad conf-title">
+        Modelo de Dispositivos
+    </h3>
+    <div ng-if="ctrl.recordID != undefined">
+        <form name="form_" ng-submit="ctrl[ctrl.objPrincipal].save()">
+
+            <div class="form-group">
+                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                    <div class="btn-group pull-left" role="group" aria-label="First group">
+                        <div class="btn btn-default glyphicon glyphicon-arrow-left" ng-click="ctrl.voltarLista()"></div>
+                    </div>
+                    <div class="btn-group pull-right" role="group" aria-label="First group">
+                        <button type="submit" ng-disabled="!form_.$dirty"
+                                class="btn btn-secondary glyphicon glyphicon-floppy-disk"></button>
+                        <div class="btn btn-default glyphicon glyphicon-erase" ng-show="ctrl[ctrl.objPrincipal].editing"
+                             ng-click="ctrl[ctrl.objPrincipal].clear();"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="dispositivo">Dispositivo Config:</label>
+                <select id="dispositivo" class="form-control" ng-model="ctrl[ctrl.objPrincipal].editing.dispositivo.idDispositivo" required="true">
+
+                    <option ng-repeat="item in dispositivos" value="{{item.idDispositivo}}" ng-bind="item.nome"></option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="nome">Nome</label>
+                <input type="text" class="form-control" id="nome" ng-model="ctrl[ctrl.objPrincipal].editing.nome" required="true"
+                       ng-disabled="!ctrl[ctrl.objPrincipal].editable">
+            </div>
+
+
+            <h3 class="cad conf-title">
+                Modelo de Ação
+            </h3>
+
+            <div class="form-group" >
+                <label for="nomeacao">Nome Ação:</label>
+            <input type="text" id="nomeacao" class="form-control" id="descricao" ng-model="ctrl[ctrl.objPrincipal].editing.nomeacao" required="true"
+                   ng-disabled="!ctrl[ctrl.objPrincipal].editable">
+                </div>
+
+            <div class="form-group">
+                <label for="descriacao">Descrição Ação:</label>
+            <input type="text" id="descriacao" class="form-control" ng-model="ctrl[ctrl.objPrincipal].editing.descricao" required="true"
+                   ng-disabled="!ctrl[ctrl.objPrincipal].editable">
+            </div>
+
+            <div class="form-group">
+                <label>Parametro do Dispositivo:</label>
+            </div>
+            <div  class="form-group">
+                <label for="descriacao">Ligado:</label>
+
+                <select>
+                    <option>Sim</option>
+                    <option>Nao</option>
+                </select>
+                <!--{{parametros}}-->
+            </div>
+
+        </form>
+    </div>
+    <div ng-if="ctrl.recordID === undefined" class="container-fluid">
+        <div class="row">
+            <a ng-href="#/modelodispositivo/0" class="btn btn-success">Novo registro</a>
+            <p></p>
+            <table ng-table="ctrl[ctrl.objPrincipal].table" style="position: relative"
+                   class=" table table-condensed table-bordered table-striped table-hover">
+                <tr ng-repeat="row in $data" style="cursor:pointer" ng-click="$root.go('/modelodispositivo/'+row[ctrl.idObjPrincipal])">
+                    <td data-title="'ID'" header-class="'col-md-2'" class="text-center">{{row[ctrl.idObjPrincipal]}}</td>
+                    <td data-title="'Dispositivo'" header-class="'col-md-2'" class="text-center">{{row.dispositivo.nome}}</td>
+                    <td data-title="'Nome'" header-class="'col-md-8'" class="text-center">{{row.nome}}</td>
+
+                    <table ng-table="ctrl[ctrl.objPrincipal].table" style="position: relative"
+                           class=" table table-condensed table-bordered table-striped table-hover">
+                        <tr ng-repeat="row in $data" style="cursor:pointer" ng-click="$root.go('/modeloacao/'+row[ctrl.idObjPrincipal])">
+                    <td data-title="'Nome Ação'" header-class="'col-md-2'" class="text-center">{{row[ctrl.idObjPrincipal]}}</td>
+                    <td data-title="'Descrição Ação'" header-class="'col-md-4'" class="text-center">{{row.nomeacao.idmodeloacao}}</td>
+                    <td data-title="'Parametro do Dispositivo'" header-class="'col-md-5'" class="text-center">{{row.nome}}</td>
+                        </tr>
+                   </table>
+
+
+
+
+                </tr>
+            </table>
+        </div>
+
+    </div>
+</div>
+
