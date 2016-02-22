@@ -14,10 +14,12 @@ import br.com.cdweb.persistence.domain.FilaEventoExecutar;
 import br.com.cdweb.persistence.domain.ModeloAcao;
 import br.com.cdweb.persistence.domain.Usuario;
 import br.com.cdweb.persistence.jpa.JpaAllEntities;
+import br.com.cdweb.server.filters.Secured;
 
 @Path("acao")
 public class AcaoService {
 
+	@Secured
 	@POST
 	@Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
