@@ -3,12 +3,14 @@ package br.com.cdweb.persistence.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -29,6 +31,7 @@ public class PerfilAcesso  extends ComunEntidades implements Serializable{
     @Column(name = "id_perfil_acesso", updatable=false)
 	private long idPerfilAcesso;
 	
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="id_perfil")
 	private Perfil perfil;
 	

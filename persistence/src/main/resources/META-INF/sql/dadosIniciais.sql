@@ -1,4 +1,30 @@
-INSERT INTO usuario (id_usuario, LOGIN, NOME, SENHA, TELEFONE) VALUES (nextval('usuario_id_usuario_seq'), 'admin', 'Administrador', 'admin', '4199653639');
+INSERT INTO usuario (id_usuario, LOGIN, NOME, SENHA, TELEFONE) VALUES (1, 'admin', 'Administrador', 'admin', '4199653639');
+INSERT INTO usuario (id_usuario, LOGIN, NOME, SENHA, TELEFONE) VALUES (2, 'mairalima', 'Maira Lima', 'mairalima', '419999999');
+INSERT INTO usuario (id_usuario, LOGIN, NOME, SENHA, TELEFONE) VALUES (3, 'willianganzert', 'Willian Ganzert', 'willianganzert', '419999999');
+INSERT INTO usuario (id_usuario, LOGIN, NOME, SENHA, TELEFONE) VALUES (4, 'visitante', 'Visitante', 'visitante', '419999999');
+
+INSERT INTO perfil(id_perfil, descricao, nome) VALUES (1, 'Administrador do Sistema', 'Administrador');
+INSERT INTO perfil(id_perfil, descricao, nome) VALUES (2, 'Usuario do Sistema', 'Usuario');
+INSERT INTO perfil(id_perfil, descricao, nome) VALUES (3, 'Visitante', 'Visitante');
+
+
+INSERT INTO usuario_perfil(id_usuario_perfil, dataatribuicao, id_perfil, id_usuario)
+    VALUES (1, current_timestamp, 1, 1);
+INSERT INTO usuario_perfil(id_usuario_perfil, dataatribuicao, id_perfil, id_usuario)
+    VALUES (2, current_timestamp, 2, 1);
+INSERT INTO usuario_perfil(id_usuario_perfil, dataatribuicao, id_perfil, id_usuario)
+    VALUES (3, current_timestamp, 2, 2);
+INSERT INTO usuario_perfil(id_usuario_perfil, dataatribuicao, id_perfil, id_usuario)
+    VALUES (4, current_timestamp, 2, 3);
+INSERT INTO usuario_perfil(id_usuario_perfil, dataatribuicao, id_perfil, id_usuario)
+    VALUES (5, current_timestamp, 3, 4);
+    
+INSERT INTO perfil_acesso(
+            id_perfil_acesso, dataatribuicao, id_modelo_dispositivo, id_modelo_predefinicao, 
+            id_perfil)
+    VALUES (1, current_timestamp, 1, 0,3);
+            
+            
 
 
 --Exemplo

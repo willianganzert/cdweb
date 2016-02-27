@@ -16,6 +16,7 @@ import br.com.cdweb.persistence.domain.ComunEntidades;
 import br.com.cdweb.persistence.jpa.JpaAllEntities;
 import br.com.cdweb.persistence.type.OrderType;
 import br.com.cdweb.persistence.util.UtlEntity;
+import br.com.cdweb.server.filters.Secured;
 
 public class TemplateCRUDService<T extends ComunEntidades> {
 	private final Class<T> type;
@@ -23,13 +24,14 @@ public class TemplateCRUDService<T extends ComunEntidades> {
     public TemplateCRUDService(Class<T> type) {
          this.type = type;
     }
-	
+	@Secured
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<T> buscarTodos() {
     	return JpaAllEntities.listAll(null, null, type, OrderType.ASC, UtlEntity.getIdFieldName(type));
     }
 
+	@Secured
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -37,6 +39,7 @@ public class TemplateCRUDService<T extends ComunEntidades> {
         return JpaAllEntities.findById(id,type);
     }
 
+	@Secured
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -45,6 +48,7 @@ public class TemplateCRUDService<T extends ComunEntidades> {
         return object;
     }
 
+	@Secured
     @PUT
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -54,6 +58,7 @@ public class TemplateCRUDService<T extends ComunEntidades> {
         return object;
     }
 
+	@Secured
     @DELETE
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -62,3 +67,4 @@ public class TemplateCRUDService<T extends ComunEntidades> {
     }
 
 }
+

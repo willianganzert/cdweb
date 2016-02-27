@@ -13,52 +13,27 @@ import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
+import br.com.cdweb.persistence.domain.Token;
+import br.com.cdweb.persistence.jpa.JpaAllEntities;
 
-@Singleton
-@Startup
+
 public class ControlAccessBean {
-	private List<String> tokens;
-	@PostConstruct
-	private void startup() {
-		System.out.println("=======================");
-		System.out.println("=====INICIANDO CDWEB======");
-		System.out.println("=======================");
-		
-		this.tokens = new ArrayList<String>();
-	}
 	
-	@PreDestroy
-	private void shutdown() { 
-		System.out.println("=======================");
-		System.out.println("=====FINALIZANDO CDWEB======");
-		System.out.println("=======================");	
-		
-		// This manually deregisters JDBC driver, which prevents Tomcat 7 from complaining about memory leaks wrto this class
-        Enumeration<Driver> drivers = DriverManager.getDrivers();
-        while (drivers.hasMoreElements()) {
-            Driver driver = drivers.nextElement();
-            try {
-                DriverManager.deregisterDriver(driver);
-                System.out.println(String.format("[%s] deregistering jdbc driver: %s",Level.INFO, driver));
-//                LOG.log(Level.INFO, String.format("deregistering jdbc driver: %s", driver));
-            } catch (SQLException e) {
-            	System.out.println(String.format("[%s] Error deregistering driver % %s",Level.SEVERE, driver));
-            	e.printStackTrace();
-//                LOG.log(Level.SEVERE, String.format("Error deregistering driver %s", driver), e);
-            }
 
-        }
+	public ControlAccessBean() {		
 	}
 	
-	public void storageToken(String token){
-		if(tokens == null){
-			this.tokens = new ArrayList<String>();
-		}
-		this.tokens.add(token);
+	public void storageToken(Token token){
+		JpaAllEntities.insert(token);
 	}
 	
 	public boolean tokenIsValid(String token) {
-		if(this.tokens.contains(token)){
+		List<String>tokens = new ArrayList<String>();
+		List<Token> filterVo = JpaAllEntities.listAll(Token.class);
+		for (Token tokenFor : filterVo) {
+			tokens.add(tokenFor.getGeneratedToken());
+		}
+		if(tokens.contains(token)){
 			return true;
 		}
 		return false;
