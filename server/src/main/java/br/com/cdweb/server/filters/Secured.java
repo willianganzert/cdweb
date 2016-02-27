@@ -10,10 +10,5 @@ import javax.ws.rs.NameBinding;
 @NameBinding
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
-public @interface Secured {
-	public enum NivelPermicao {
-		   ADM,USER
-		}
-
-		NivelPermicao nivelPermissao() default NivelPermicao.USER;
+public @interface Secured {	
 }

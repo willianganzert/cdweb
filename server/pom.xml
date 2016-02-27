@@ -104,6 +104,7 @@
 	
 	<build>
 		<finalName>server</finalName>
+		<pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
@@ -112,13 +113,14 @@
 				<configuration>
 					<url>http://localhost:8080/manager/text</url>
 					<server>TomcatServer</server>
-					<path>/CDWEB</path>
+					<path>/server</path>
 					<username>admin</username>
-                    <password>admin</password>
+                    <password>password</password>
                     <update>true</update>
 				</configuration>
 			</plugin>
 		</plugins>
+		</pluginManagement>
 	</build>	
 	
 </project>

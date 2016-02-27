@@ -17,7 +17,6 @@ import br.com.cdweb.persistence.jpa.JpaAllEntities;
 import br.com.cdweb.persistence.type.OrderType;
 import br.com.cdweb.persistence.util.UtlEntity;
 import br.com.cdweb.server.filters.Secured;
-import br.com.cdweb.server.filters.Secured.NivelPermicao;
 
 public class TemplateCRUDService<T extends ComunEntidades> {
 	private final Class<T> type;
@@ -25,14 +24,14 @@ public class TemplateCRUDService<T extends ComunEntidades> {
     public TemplateCRUDService(Class<T> type) {
          this.type = type;
     }
-	@Secured(nivelPermissao=NivelPermicao.USER)
+	@Secured
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<T> buscarTodos() {
     	return JpaAllEntities.listAll(null, null, type, OrderType.ASC, UtlEntity.getIdFieldName(type));
     }
 
-	@Secured(nivelPermissao=NivelPermicao.USER)
+	@Secured
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -40,7 +39,7 @@ public class TemplateCRUDService<T extends ComunEntidades> {
         return JpaAllEntities.findById(id,type);
     }
 
-	@Secured(nivelPermissao=NivelPermicao.ADM)
+	@Secured
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -49,7 +48,7 @@ public class TemplateCRUDService<T extends ComunEntidades> {
         return object;
     }
 
-	@Secured(nivelPermissao=NivelPermicao.ADM)
+	@Secured
     @PUT
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -59,7 +58,7 @@ public class TemplateCRUDService<T extends ComunEntidades> {
         return object;
     }
 
-	@Secured(nivelPermissao=NivelPermicao.ADM)
+	@Secured
     @DELETE
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -68,3 +67,4 @@ public class TemplateCRUDService<T extends ComunEntidades> {
     }
 
 }
+

@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javax.annotation.Priority;
 import javax.ejb.EJB;
-import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -13,6 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import br.com.cdweb.server.startup.ControlAccessBean;
+import br.com.cdweb.server.util.TokenUtil;
 
 @Secured
 @Provider
@@ -29,30 +29,13 @@ public class AuthenticationFilter implements ContainerRequestFilter{
         String authorizationHeader = 
             requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
 
-        // Check if the HTTP Authorization header is present and formatted correctly 
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            throw new NotAuthorizedException("Authorization header must be provided");
+        Response.Status status = new br.com.cdweb.server.util.TokenUtil().validateTokenAccess(authorizationHeader);
+        if(status.equals(Response.Status.OK)){
+        	
         }
-
-        // Extract the token from the HTTP Authorization header
-        String token = authorizationHeader.substring("Bearer ".length()).trim();
-
-        try {
-
-            // Validate the token
-            validateToken(token);
-
-        } catch (Exception e) {
-            requestContext.abortWith(
-                Response.status(Response.Status.UNAUTHORIZED).build());
+        else{
+        	requestContext.abortWith(
+                    Response.status(status).build());
         }
-    }
-
-    private void validateToken(String token) throws Exception {
-        // Check if it was issued by the server and if it's not expired
-        // Throw an Exception if the token is invalid
-    	if(!bean.tokenIsValid(token)){
-    		throw new Exception("ERRO TOKEN");
-    	}
-    }
+    }	
 }
