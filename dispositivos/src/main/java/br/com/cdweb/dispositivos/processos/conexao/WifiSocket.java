@@ -14,6 +14,11 @@ import br.com.cdweb.dispositivos.configuracoes.Configuracoes;
 import br.com.cdweb.dispositivos.configuracoes.conexao.ControleLogConexoes;
 
 public class WifiSocket implements Runnable{
+	public static void main(String[] args) {
+		WifiSocket wifi= new WifiSocket();
+		wifi.run();
+		
+	}
 	private Gson gson;
 	public WifiSocket() {
 		gson = new Gson();
@@ -38,7 +43,6 @@ public class WifiSocket implements Runnable{
 
 			String received = new String(packet.getData(), 0, packet.getLength());
 			received = new String(Base64.getDecoder().decode(received));
-//			System.out.println(String.format("%s",received));
 			if(received != null){
 				MensagemConexao mensagemConexao = gson.fromJson(received, MensagemConexao.class);
 				if(mensagemConexao.getTipoMensagem().equals(MensagemConexao.TipoMensagem.BROADCAST)){
@@ -48,7 +52,6 @@ public class WifiSocket implements Runnable{
 				}
 			}
 			
-				
 			socket.leaveGroup(address);
 			socket.close();
 		} catch (IOException e) {			

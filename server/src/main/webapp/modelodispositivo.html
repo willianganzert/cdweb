@@ -22,10 +22,11 @@
 
             <div class="form-group">
                 <label for="dispositivo">Dispositivo Config:</label>
-                <select id="dispositivo" class="form-control" ng-model="ctrl[ctrl.objPrincipal].editing.dispositivo.idDispositivo" required="true">
+                <!--<select id="dispositivo" class="form-control" ng-model="ctrl[ctrl.objPrincipal].editing.dispositivo.idDispositivo" required="true">
 
                     <option ng-repeat="item in dispositivos" value="{{item.idDispositivo}}" ng-bind="item.nome"></option>
-                </select>
+                </select>-->
+                <select id="dispositivo" class="form-control" ng-options="item as item.nome for item in dispositivos track by item.id" ng-model="ctrl[ctrl.objPrincipal].editing.dispositivo"></select>
             </div>
 
             <div class="form-group">
@@ -34,41 +35,101 @@
                        ng-disabled="!ctrl[ctrl.objPrincipal].editable">
             </div>
 
+            <!--<div class="panel panel-default">
+                <div class="panel-heading">Modelo de Ação</div>
+                <div class="panel-body">
+                    <div class="form-group" >
+                        <label for="nomeacao">Nome Ação:</label>
+                        <input type="text" id="nomeacao" class="form-control" id="descricao" ng-model="ctrl[ctrl.objPrincipal].editing.nomeacao" required="true"
+                               ng-disabled="!ctrl[ctrl.objPrincipal].editable">
+                    </div>
 
-            <h3 class="cad conf-title">
-                Modelo de Ação
-            </h3>
+                    <div class="form-group">
+                        <label for="descriacao">Descrição Ação:</label>
+                        <input type="text" id="descriacao" class="form-control" ng-model="ctrl[ctrl.objPrincipal].editing.descricao" required="true"
+                               ng-disabled="!ctrl[ctrl.objPrincipal].editable">
+                    </div>
 
-            <div class="form-group" >
-                <label for="nomeacao">Nome Ação:</label>
-            <input type="text" id="nomeacao" class="form-control" id="descricao" ng-model="ctrl[ctrl.objPrincipal].editing.nomeacao" required="true"
-                   ng-disabled="!ctrl[ctrl.objPrincipal].editable">
+                    <div class="form-group">
+                        <label>Parametro do Dispositivo:</label>
+                    </div>
+                    <div  class="form-group">
+                        <label for="descriacao">Ligado:</label>
+
+                        <select>
+                            <option>Sim</option>
+                            <option>Nao</option>
+                        </select>
+                        &lt;!&ndash;{{parametros}}&ndash;&gt;
+                    </div>
                 </div>
-
-            <div class="form-group">
-                <label for="descriacao">Descrição Ação:</label>
-            <input type="text" id="descriacao" class="form-control" ng-model="ctrl[ctrl.objPrincipal].editing.descricao" required="true"
-                   ng-disabled="!ctrl[ctrl.objPrincipal].editable">
-            </div>
-
-            <div class="form-group">
-                <label>Parametro do Dispositivo:</label>
-            </div>
-            <div  class="form-group">
-                <label for="descriacao">Ligado:</label>
-
-                <select>
-                    <option>Sim</option>
-                    <option>Nao</option>
-                </select>
-                <!--{{parametros}}-->
-            </div>
-
+            </div>-->
+            <!--<table ng-table="" class="table table-condensed table-bordered table-striped table-hover">
+                <tr ng-repeat="row in ctrl[ctrl.objPrincipal].editing.modeloAcoes|orderBy:'idModeloAcao'" ng-click="ctrl.modeloAcao.edit(row)">
+                    <td data-title="'ID'" header-class="'col-md-1'" class="text-center">{{row.idModeloAcao}}</td>
+                    <td data-title="'Nome'" header-class="'col-md-1'" class="text-center">{{row.nome}}</td>
+                    <td data-title="'Descrição'" class="text-center" >{{row.descricao}}</td>
+                </tr>
+            </table>-->
         </form>
+        <div class="form-group">
+            <div class="panel panel-default">
+                <div class="panel-heading" style="height: 50px;">
+                    <div class="pull-left">
+                        Modelos de Ações
+                    </div>
+                    <div class="pull-right">
+
+                        <div class="btn btn-default glyphicon glyphicon-erase" ng-show="ctrl.modeloAcao.editing" ng-click="ctrl.modeloAcao.clear();"></div>
+                        <div class="btn btn-default glyphicon glyphicon-minus" ng-show="ctrl[ctrl.objPrincipal].editable && ctrl.modeloAcao.editing" ng-click="ctrl.modeloAcao.delete(ctrl.modeloAcao.editing);"></div>
+                        <div class="btn btn-default glyphicon glyphicon-plus" ng-show="ctrl[ctrl.objPrincipal].editable && !ctrl.modeloAcao.editing" ng-click="ctrl.modeloAcao.edit();"></div>
+                        <div class="btn btn-default glyphicon glyphicon-floppy-disk" ng-show="ctrl[ctrl.objPrincipal].editable && ctrl.modeloAcao.editing" ng-click="ctrl.modeloAcao.save();"></div>
+                    </div>
+                </div>
+                <div class="panel-body"ng-show="ctrl.modeloAcao.editing">{{}}
+                    <div class="form-group" >
+                        <label for="nomeacao">Nome Ação:</label>
+                        <input type="text" id="nomeacao" class="form-control" id="descricao" ng-model="ctrl.modeloAcao.editing.nome" required="true"
+                               ng-disabled="!ctrl[ctrl.objPrincipal].editable">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="descriacao">Descrição Ação:</label>
+                        <input type="text" id="descriacao" class="form-control" ng-model="ctrl.modeloAcao.editing.descricao" required="true"
+                               ng-disabled="!ctrl[ctrl.objPrincipal].editable">
+                    </div>
+                    <div ng-click="ctrl.modeloAcao.openModeloParametroModal()" class="btn btn-success">Adicionar/Alterar Parametros</div>
+
+                </div>
+                <table ng-table="" class="table table-condensed table-bordered table-striped table-hover">
+                    <tr ng-repeat="row in ctrl[ctrl.objPrincipal].editing.modeloAcoes|orderBy:'idModeloAcao'" ng-click="ctrl.modeloAcao.edit(row)">
+                        <td data-title="'ID'" header-class="'col-md-1'" class="text-center">{{row.idModeloAcao}}</td>
+                        <td data-title="'Nome'" header-class="'col-md-1'" class="text-center">{{row.nome}}</td>
+                        <td data-title="'Descrição'" class="text-center" >{{row.descricao}}</td>
+                        <td data-title="'Parametros'" header-class="'col-md-2'" class="text-center" >
+                            <div ng-repeat="par in row.modeloParametros">{{par.parametro.nome + "=" + par.valorParametroAcao}}</div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+
+        </div>
     </div>
     <div ng-if="ctrl.recordID === undefined" class="container-fluid">
         <div class="row">
-            <a ng-href="#/modelodispositivo/0" class="btn btn-success">Novo registro</a>
+            <div class="form-group">
+                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                    <div class="btn-group pull-left" role="group" aria-label="First group">
+                        <a class="btn btn-default glyphicon glyphicon-arrow-left" ng-href="#/menu"></a>
+                    </div>
+                    <div class="btn-group pull-right" role="group" aria-label="First group">
+                        <a ng-href="#/modelodispositivo/0" class="btn btn-success">Novo registro</a>
+                    </div>
+
+                </div>
+            </div>
+
             <p></p>
             <table ng-table="ctrl[ctrl.objPrincipal].table" style="position: relative"
                    class=" table table-condensed table-bordered table-striped table-hover">
@@ -76,23 +137,43 @@
                     <td data-title="'ID'" header-class="'col-md-2'" class="text-center">{{row[ctrl.idObjPrincipal]}}</td>
                     <td data-title="'Dispositivo'" header-class="'col-md-2'" class="text-center">{{row.dispositivo.nome}}</td>
                     <td data-title="'Nome'" header-class="'col-md-8'" class="text-center">{{row.nome}}</td>
-
-                    <table ng-table="ctrl[ctrl.objPrincipal].table" style="position: relative"
-                           class=" table table-condensed table-bordered table-striped table-hover">
-                        <tr ng-repeat="row in $data" style="cursor:pointer" ng-click="$root.go('/modeloacao/'+row[ctrl.idObjPrincipal])">
-                    <td data-title="'Nome Ação'" header-class="'col-md-2'" class="text-center">{{row[ctrl.idObjPrincipal]}}</td>
-                    <td data-title="'Descrição Ação'" header-class="'col-md-4'" class="text-center">{{row.nomeacao.idmodeloacao}}</td>
-                    <td data-title="'Parametro do Dispositivo'" header-class="'col-md-5'" class="text-center">{{row.nome}}</td>
-                        </tr>
-                   </table>
-
-
-
-
                 </tr>
             </table>
         </div>
 
     </div>
+    <script type="text/ng-template" id="modeloParametroModal.html">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                Modelo Parametro
+            </h3>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                    <div class="btn-group pull-right" role="group" aria-label="First group">
+                        <div class="btn btn-default glyphicon glyphicon-plus" ng-click="addNovo()"></div>
+                    </div>
+                </div>
+            </div>
+
+            <table ng-table="" style="position: relative"
+                   class=" table table-condensed table-bordered table-striped table-hover">
+                <tr ng-repeat="modeloParametro in modeloAcao.modeloParametros">
+                    <td data-title="'Parametro'" header-class="'col-md-2'" class="text-center">
+                        <select ng-options="item as item.nome for item in parametros track by item.id" ng-model="modeloParametro.parametro"></select>
+                    </td>
+                    <td data-title="'valor'" header-class="'col-md-2'" class="text-center">
+                        <input type="text" ng-model="modeloParametro.valorParametroAcao"/>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
 </div>
 

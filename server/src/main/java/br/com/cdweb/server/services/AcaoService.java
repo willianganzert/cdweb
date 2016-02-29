@@ -40,9 +40,9 @@ public class AcaoService {
 		StatusRequisicao requisicao = new StatusRequisicao();
 //		ModeloAcao modeloAcao = JpaAllEntities.findById(id, ModeloAcao.class);
 		
-		Response.Status requisicao2 = new TokenUtil().validateTokenAccessAction(req.getHeader(HttpHeaders.WWW_AUTHENTICATE), id);
+//		Response.Status requisicao2 = new TokenUtil().validateTokenAccessAction(req.getHeader(HttpHeaders.WWW_AUTHENTICATE), id);
 				
-		if(requisicao.equals(StatusRequisicao.Status.OK)){
+//		if(requisicao.equals(StatusRequisicao.Status.OK)){
 			Usuario usuario = getUsuarioSessao(req);
 			FilaEventoExecutar eventoExecutar = new FilaEventoExecutar();
 			eventoExecutar.setModeloAcao(JpaAllEntities.findById(id, ModeloAcao.class));
@@ -50,7 +50,7 @@ public class AcaoService {
 			eventoExecutar.setUsuario(usuario);
 			JpaAllEntities.insert(eventoExecutar);
 			requisicao.setStatusOK();
-		}
+//		}
 				
         return requisicao;
     }

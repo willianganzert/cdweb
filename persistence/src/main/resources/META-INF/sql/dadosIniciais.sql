@@ -1,7 +1,7 @@
-INSERT INTO usuario (id_usuario, LOGIN, NOME, SENHA, TELEFONE) VALUES (1, 'admin', 'Administrador', 'admin', '4199653639');
-INSERT INTO usuario (id_usuario, LOGIN, NOME, SENHA, TELEFONE) VALUES (2, 'mairalima', 'Maira Lima', 'mairalima', '419999999');
-INSERT INTO usuario (id_usuario, LOGIN, NOME, SENHA, TELEFONE) VALUES (3, 'willianganzert', 'Willian Ganzert', 'willianganzert', '419999999');
-INSERT INTO usuario (id_usuario, LOGIN, NOME, SENHA, TELEFONE) VALUES (4, 'visitante', 'Visitante', 'visitante', '419999999');
+INSERT INTO usuario (id_usuario, LOGIN, NOME, SENHA, TELEFONE) VALUES (1, 'admin@cdweb.com', 'Administrador', 'admin', '4199653639');
+INSERT INTO usuario (id_usuario, LOGIN, NOME, SENHA, TELEFONE) VALUES (2, 'mairalima@cdweb.com', 'Maira Lima', 'mairalima', '419999999');
+INSERT INTO usuario (id_usuario, LOGIN, NOME, SENHA, TELEFONE) VALUES (3, 'willianganzert@cdweb.com', 'Willian Ganzert', 'willianganzert', '419999999');
+INSERT INTO usuario (id_usuario, LOGIN, NOME, SENHA, TELEFONE) VALUES (4, 'visitante@cdweb.com', 'Visitante', 'visitante', '419999999');
 
 INSERT INTO perfil(id_perfil, descricao, nome) VALUES (1, 'Administrador do Sistema', 'Administrador');
 INSERT INTO perfil(id_perfil, descricao, nome) VALUES (2, 'Usuario do Sistema', 'Usuario');

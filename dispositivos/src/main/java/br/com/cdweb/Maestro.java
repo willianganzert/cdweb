@@ -72,6 +72,7 @@ public enum Maestro {
 
 	public void iniciarControleStatusConexao() {
 		System.out.println("Iniciando Status de Conexao");
+		
 		wifiSocket = scheduler.schedule(new WifiSocket(), 0, TimeUnit.SECONDS);
 		webConnection = scheduler.schedule(new WebConection(), 0, TimeUnit.SECONDS);
 		

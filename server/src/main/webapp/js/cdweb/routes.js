@@ -9,7 +9,9 @@ angular.module("cdweb")
                 controller:'UsuarioController'
             })
             .when('/login', {
-                templateUrl: 'login.html'
+                templateUrl: 'login.html',
+                controller: 'LoginController',
+                controllerAs:"ctrl"
             })
             
     

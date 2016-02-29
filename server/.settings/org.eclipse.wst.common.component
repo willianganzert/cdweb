@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="ServerExt_CDWEB">
+    <wb-module deploy-name="server">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <dependent-module archiveName="persistence-0.0.1-SNAPSHOT-PERSISTENCE.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/persistence/persistence">
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="persistence-1.0.1-SNAPSHOT-CWP.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/persistence/persistence">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="commons-interface-0.0.1-SNAPSHOT-CI.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/commons-interface/commons-interface">
+        <dependent-module archiveName="commons-interface-1.0.1-SNAPSHOT-CWCI.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/commons-interface/commons-interface">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <property name="java-output-path" value="/ServerExt_CDWEB/target/classes"/>
+        <property name="java-output-path" value="/server/target/classes"/>
         <property name="context-root" value="server"/>
     </wb-module>
 </project-modules>

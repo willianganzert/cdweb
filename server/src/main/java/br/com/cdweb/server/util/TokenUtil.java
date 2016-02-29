@@ -9,6 +9,7 @@ import javax.ws.rs.core.Response.Status;
 import br.com.cdweb.persistence.domain.ModeloAcao;
 import br.com.cdweb.persistence.domain.PerfilAcesso;
 import br.com.cdweb.persistence.domain.Token;
+import br.com.cdweb.persistence.domain.Usuario;
 import br.com.cdweb.persistence.domain.UsuarioPerfil;
 import br.com.cdweb.persistence.jpa.JpaAllEntities;
 import br.com.cdweb.persistence.vo.FieldValuesVo;
@@ -103,5 +104,19 @@ public class TokenUtil {
 			throw new Exception("ERRO TOKEN");
 		}
 	}
+	
+	public Usuario getUsuario(String token) throws Exception {
+		String stoken = extractToken(token);
+		ResultFilterVo<Token> resultFilterVo = JpaAllEntities.doFilter(Token.class, new FieldValuesVo("generatedToken", stoken));
+		if(resultFilterVo != null && resultFilterVo.getResultQuery() != null && resultFilterVo.getResultQuery().size() > 0){
+			Token token2 = resultFilterVo.getResultQuery().get(0);
+			return token2.getUsuario();
+		}
+		else {
+			throw new Exception("ERRO TOKEN INEXISTENTE");
+		}
+	}
+	
+	
 
 }

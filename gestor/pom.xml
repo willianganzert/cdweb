@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.com.cdweb</groupId>
 	<artifactId>gestor</artifactId>
-	<version>0.0.1-SNAPSHOT-GESTOR</version>
+	<version>1.0.1-SNAPSHOT-CDG</version>
 	<packaging>jar</packaging>
 	<parent>
 		<groupId>br.com.cdweb.serverbuild</groupId>
@@ -66,12 +66,12 @@
 			<dependency>
 				<groupId>br.com.cdweb</groupId>
 				<artifactId>persistence</artifactId>
-				<version>0.0.1-SNAPSHOT-PERSISTENCE</version>
+				<version>1.0.1-SNAPSHOT-CWP</version>
 			</dependency>
 			<dependency>
 				<groupId>br.com.cdweb.commonsinterface</groupId>
 				<artifactId>commons-interface</artifactId>
-				<version>0.0.1-SNAPSHOT-CI</version>
+				<version>1.0.1-SNAPSHOT-CWCI</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

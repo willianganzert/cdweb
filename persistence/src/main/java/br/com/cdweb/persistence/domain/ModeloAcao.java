@@ -1,16 +1,24 @@
 package br.com.cdweb.persistence.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 @Entity
 @Table(name="modelo_acao")
@@ -27,13 +35,20 @@ public class ModeloAcao extends ComunEntidades implements Serializable {
     @Column(name = "id_modelo_acao", updatable=false)
 	private long idModeloAcao;
 	
-	@ManyToOne
-	@JoinColumn(name="id_modelo_dispositivo")
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "id_modelo_dispositivo")
+	@JsonBackReference
+//	@XmlAttribute @XmlIDREF 
 	private ModeloDispositivo modeloDispositivo;
 
 	private String nome;
 
 	private String descricao;
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="id_modelo_acao")
+	@JsonManagedReference
+    private List<ModeloParametro> modeloParametros;
 	
 	
 	public ModeloAcao() {
@@ -71,6 +86,16 @@ public class ModeloAcao extends ComunEntidades implements Serializable {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+
+	public List<ModeloParametro> getModeloParametros() {
+		return modeloParametros;
+	}
+
+	public void setModeloParametros(List<ModeloParametro> modeloParametros) {
+		this.modeloParametros = modeloParametros;
+	}
+
+	
 
 	
 

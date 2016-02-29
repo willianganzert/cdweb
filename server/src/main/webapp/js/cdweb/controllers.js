@@ -174,7 +174,7 @@ angular.module("cdweb")
     }])
 
 
-    .controller("ModeloDispositivoController", ['$scope','NgTableParams',"$filter", "$q",'ModeloDispositivoFactory','DispositivoFactory',"$routeParams",'$location', function ($scope,NgTableParams,$filter, $q,ModeloDispositivoFactory,DispositivoFactory,$routeParams,$location) {
+    .controller("ModeloDispositivoController", ['$scope','NgTableParams',"$filter", "$q",'ModeloDispositivoFactory','DispositivoFactory',"$routeParams",'$location','$uibModal', function ($scope,NgTableParams,$filter, $q,ModeloDispositivoFactory,DispositivoFactory,$routeParams,$location,$uibModal) {
         var ctrl = this;
         ctrl.objPrincipal = "modelodispositivo";
         ctrl.idObjPrincipal = "idModeloDispositivo";
@@ -236,6 +236,141 @@ angular.module("cdweb")
                 ctrl[ctrl.objPrincipal].editing = null;
             }
         }
+        ctrl.modeloAcao = {
+            ID_NAME: "idModeloAcao",
+            model: {
+                descricao: "",
+                nome: "",
+                modeloParametros:[]
+            },
+            editing: null,
+            removeList: [],
+            clear: function () {
+                ctrl.modeloAcao.editing = null;
+            },
+            edit: function (record) {
+                if (record) {
+                    var tempRecord = angular.extend({}, record);
+                    ctrl.modeloAcao.editing = ctrl.modeloAcao.convertData && ctrl.modeloAcao.convertData.in ? ctrl.modeloAcao.convertData.in(tempRecord) : tempRecord;
+                }
+                else {
+                    record = angular.extend({}, ctrl.modeloAcao.model);
+                    ctrl.modeloAcao.edit(record);
+                }
+            },
+            save: function (record) {
+                record = record ? record : ctrl.modeloAcao.editing;
+                ctrl.schedule.form.$setDirty();
+
+                var indexArray = ctrl.modeloAcao.isInArray(record, ctrl.schedule.editing.scheduleParams);
+                var isNewRecord = indexArray == -1;
+                if (!isNewRecord) {
+                    ctrl.schedule.editing.scheduleParams.splice(indexArray, 1);
+                }
+
+                if (record.paramOrder < ctrl.modeloAcao.calculateNextOrder(ctrl.schedule.editing.scheduleParams)) {
+                    ctrl.schedule.editing.scheduleParams.push(ctrl.modeloAcao.calculateOrders(record, ctrl.schedule.editing.scheduleParams));
+                }
+                else {
+                    ctrl.schedule.editing.scheduleParams.push(record);
+                }
+
+                if (!isNewRecord) {
+                    ctrl.modeloAcao.resetOrder(ctrl.schedule.editing.scheduleParams);
+                    ctrl.schedule.editing.scheduleParams.sort(function (a, b) {
+                        return a.paramOrder - b.paramOrder
+                    });
+                }
+
+                ctrl.modeloAcao.clear();
+            },
+            delete: function (record) {
+                if (record[this.ID_NAME]) {
+                    ctrl.modeloAcao.removeList.push(record);
+                }
+                for (var idx = 0; ctrl.schedule.editing.scheduleParams.length; idx++) {
+                    if (record == ctrl.schedule.editing.scheduleParams[idx]) {
+                        ctrl.schedule.editing.scheduleParams.splice(idx, 1);
+                        break;
+                    }
+                }
+                ctrl.modeloAcao.clear();
+            },
+            openModeloParametroModal: function () {
+
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    templateUrl: 'modeloParametroModal.html',
+                    controller:'ModeloParametrosController',
+                    size: 'lg',
+                    resolve: {
+                        modeloAcao: function () {
+                            return ctrl.modeloAcao.editing;
+                        },
+                        parametros: function() {
+                            return $scope.parametros
+                        }
+                    }
+
+                })
+                modalInstance.result.then(function (selectedItem) {
+                    $scope.selected = selectedItem;
+                }, function () {
+                    $log.info('Modal dismissed at: ' + new Date());
+                });
+
+
+            },
+            calculateNextOrder: function (params) {
+                var order = 0;
+                if (params) {
+                    for (var p in params) {
+                        if (params[p].paramOrder > order) {
+                            order = params[p].paramOrder;
+                        }
+                    }
+                }
+                return ++order;
+            },
+            calculateOrders: function (newParam, params) {
+                if (params && newParam) {
+                    for (var p in params) {
+                        if (params[p].paramOrder >= newParam.paramOrder) {
+                            params[p].paramOrder++;
+                        }
+                    }
+                }
+                return newParam;
+            },
+            isInArray: function (newParam, params) {
+                if (params && newParam) {
+                    for (var p in params) {
+                        if (params[p] == newParam) {
+                            return p;
+                        }
+                    }
+                }
+                return -1;
+            },
+            resetOrder: function (params, startAt) {
+                startAt = (startAt ? startAt : 0);
+                var less = null;
+                var indexLess = null;
+                for (var p = startAt; p < params.length; p++) {
+                    if (!less || params[p].paramOrder < less.paramOrder) {
+                        less = params[p];
+                        indexLess = p;
+                    }
+                }
+                if (less) {
+                    params.splice(indexLess, 1);
+                    params.unshift(less);
+                    less.paramOrder = startAt + 1;
+                    this.resetOrder(params, (startAt + 1));
+                }
+            }
+        }
+
         if (ctrl.recordID) {
             if (ctrl.recordID > 0) {
                 ModeloDispositivoFactory.get({id: ctrl.recordID}, function (data) {
@@ -267,7 +402,26 @@ angular.module("cdweb")
             });
         }
     }])
+    .controller("ModeloParametrosController", ['$scope','NgTableParams','modeloAcao','parametros', function ($scope,NgTableParams,modeloAcao,parametros) {
+        /*var self = this;
 
+        var originalData = angular.copy(simpleList);
+
+        self.tableParams = new NgTableParams({}, {
+            dataset: angular.copy(simpleList)
+        });*/
+        $scope.parametros = parametros;
+        $scope.modeloAcao = modeloAcao;
+        $scope.addNovo=function(){
+            $scope.modeloAcao.modeloParametros.push({parametro:null,valorParametroAcao: ""});
+        };
+        $scope.ok=function(){
+            $scope.$close($scope.selected.item);
+        };
+        $scope.cancel = function(){
+            $scope.$dismiss('cancel');
+        }
+    }])
     .controller("ModeloAcao", ['$scope','NgTableParams',"$filter", "$q",'ModeloAcaoFactory','ModeloParametroFactory',"$routeParams",'$location', function ($scope,NgTableParams,$filter, $q,ModeloAcaoFactory,ModeloParametroFactory,$routeParams,$location) {
         var ctrl = this;
         ctrl.objPrincipal = "modeloacao";
@@ -361,5 +515,28 @@ angular.module("cdweb")
             });
         }
     }])
+    .controller('LoginController', ['$scope', '$location', 'AuthenticationService','$rootScope',
+        function ($scope, $location, AuthenticationService, $rootScope) {
+            var ctrl = this;
+
+            ctrl.login = login;
+
+            (function initController() {
+                // reset login status
+                AuthenticationService.clearCredentials();
+            })();
+
+            function login() {
+                ctrl.dataLoading = true;
+                AuthenticationService.login(ctrl.username, ctrl.password).then(function (data) {
+                    $rootScope["authorized"] = true;
+                    $location.path('/menu');
+                }, function (data) {
+                    alert("Não foi possível efetuar login")
+                    ctrl.dataLoading = false;
+                });
+            };
+        }
+    ])
 
 

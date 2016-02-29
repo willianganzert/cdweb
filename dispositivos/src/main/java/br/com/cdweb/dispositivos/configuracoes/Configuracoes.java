@@ -36,7 +36,7 @@ public enum Configuracoes {
 
 	public void setUrlServicosServidorInterno(String host) {
 		this.urlServicosServidorInterno = PREFIX_SERVICOS + host + ":8080/" + SUFIX_SERVICOS;
-		System.out.println(this.urlServicosServidorInterno);
+//		System.out.println(this.urlServicosServidorInterno);
 	}
 
 	public void setName(String name) {

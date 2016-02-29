@@ -24,14 +24,14 @@ public class TemplateCRUDService<T extends ComunEntidades> {
     public TemplateCRUDService(Class<T> type) {
          this.type = type;
     }
-	@Secured
+//	@Secured
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<T> buscarTodos() {
     	return JpaAllEntities.listAll(null, null, type, OrderType.ASC, UtlEntity.getIdFieldName(type));
     }
 
-	@Secured
+//	@Secured
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -39,7 +39,7 @@ public class TemplateCRUDService<T extends ComunEntidades> {
         return JpaAllEntities.findById(id,type);
     }
 
-	@Secured
+//	@Secured
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -48,7 +48,7 @@ public class TemplateCRUDService<T extends ComunEntidades> {
         return object;
     }
 
-	@Secured
+//	@Secured
     @PUT
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -58,7 +58,7 @@ public class TemplateCRUDService<T extends ComunEntidades> {
         return object;
     }
 
-	@Secured
+//	@Secured
     @DELETE
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)

@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response;
 
 import br.com.cdweb.persistence.domain.Token;
 import br.com.cdweb.persistence.domain.Usuario;
+import br.com.cdweb.persistence.domain.UsuarioPerfil;
 import br.com.cdweb.persistence.jpa.JpaAllEntities;
 import br.com.cdweb.persistence.vo.FieldValuesVo;
 import br.com.cdweb.persistence.vo.ResultFilterVo;
@@ -23,8 +24,8 @@ import br.com.cdweb.server.startup.ControlAccessBean;
 
 @Path("/authentication")
 public class AuthenticationService {
-	@EJB
-	private ControlAccessBean controlAccessBean;
+	
+	private ControlAccessBean controlAccessBean = new ControlAccessBean();
 
     @POST
     @Produces(MediaType.TEXT_PLAIN)
@@ -41,7 +42,24 @@ public class AuthenticationService {
 
             Token token = authAndGenerateToken(username, password);
             controlAccessBean.storageToken(token);
-            return Response.ok(token.getGeneratedToken()).build();
+            ResultFilterVo<UsuarioPerfil> filterUsuariPerfil = JpaAllEntities.doFilter(UsuarioPerfil.class, new FieldValuesVo("usuario", token.getUsuario()));
+            StringBuilder builder = new StringBuilder();
+            List<UsuarioPerfil> usuarioPerfils = filterUsuariPerfil.getResultQuery();
+            if(usuarioPerfils != null && usuarioPerfils.size() > 0){
+            	for (UsuarioPerfil usuarioPerfil : usuarioPerfils) {
+    				if(builder.length() > 0){
+    					builder.append(',');
+    				}
+    				builder.append('"');
+    				builder.append(usuarioPerfil.getPerfil().getNome().toLowerCase());
+    				builder.append('"');
+    			}
+            }
+            else{
+            	builder.append("\"administrador\"");
+            }
+            
+            return Response.ok("[\"" + token.getGeneratedToken() + "\",["+builder.toString()+"]]").build();
 
         } catch (Exception e) {
         	System.out.println("ERRO AUTENTICAÇÃO");
@@ -52,7 +70,7 @@ public class AuthenticationService {
 	private Token authAndGenerateToken(String username, String password) throws Exception {
 		// Authenticate the user using the credentials provided
 		Token token = authenticate(username, password);
-		if(token != null){
+		if(token == null){
 			throw new Exception("Usuário/Senha Inválido.");
 		}		
 		System.out.println("AUTENTICACAO TOKEN - " + token.getGeneratedToken());

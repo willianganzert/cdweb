@@ -39,4 +39,9 @@ public class BroadcartNetwork implements Runnable {
 
 
 	}
+	
+	public static void main(String[] args) throws IOException {
+		BroadcartNetwork broadcartNetwork = new BroadcartNetwork();
+		broadcartNetwork.run();
+	}
 }

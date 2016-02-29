@@ -11,6 +11,8 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="usuario")
 @SequenceGenerator(name="usuario_id_usuario_seq", sequenceName="usuario_id_usuario_seq", allocationSize=1)	
