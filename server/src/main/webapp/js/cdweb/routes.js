@@ -61,6 +61,18 @@ angular.module("cdweb")
                 controllerAs:"ctrl"
             })
 
+            .when('/perfil', {
+                templateUrl: 'perfil.html',
+                controller:'PerfilController',
+                controllerAs:"ctrl"
+            })
+
+            .when('/perfil/:id', {
+                templateUrl: 'perfil.html',
+                controller:'PerfilController',
+                controllerAs:"ctrl"
+            })
+
 
 
             .when('/Book/:bookId/ch/:chapterId', {

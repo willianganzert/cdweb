@@ -33,7 +33,7 @@ angular.module("cdweb")
             $scope.cadastro = false;
         }
     }])
-    .controller("DispositivoController", ['$scope','NgTableParams',"$filter", "$q",'DispositivoFactory',"$routeParams",'$location', function ($scope,NgTableParams,$filter, $q,DispositivoFactory,$routeParams,$location) {
+    .controller("DispositivoController", ['$scope','NgTableParams',"$filter", "$q",'DispositivoFactory',"$routeParams",'$location','ParametroFactory', function ($scope,NgTableParams,$filter, $q,DispositivoFactory,$routeParams,$location,ParametroFactory) {
         var ctrl = this;
         ctrl.params = $routeParams;
         ctrl.recordID = $routeParams && $routeParams.id?$routeParams.id:undefined;
@@ -41,7 +41,10 @@ angular.module("cdweb")
         ctrl.voltarLista = function () {
             $location.path('/dispositivo')
         }
+        ctrl.objPrincipal = "dispositivo";
+
         ctrl.dispositivo = {
+            ID_NAME: "idDispositivo",
             model: {
                 nome:""
             },
@@ -81,6 +84,62 @@ angular.module("cdweb")
                 ctrl.dispositivo.editing = null;
             }
         }
+        ctrl.parametro = {
+            ID_NAME: "idParametro",
+            model: {
+                nome: "",
+                tipo: 1,//1|2|3
+                tipoValor: "",
+                tipoValor2: ""
+            },
+            habilitaCampo2 :false,
+            editable : true,
+            editing: null,
+            dataConvert:{
+                in: function (data) {
+                    ctrl.parametro.changeTipoDado(data.tipo)
+                    return data;
+                },
+                out: function (data) {
+                    if(ctrl.dispositivo.editing[ctrl.dispositivo.ID_NAME]){
+                        data.dispositivo = {};
+                        data.dispositivo[ctrl.dispositivo.ID_NAME] = ctrl.dispositivo.editing[ctrl.dispositivo.ID_NAME];
+                    }
+                    return data;
+                }
+            },
+            edit: function (record) {
+                if (record) {
+                    this.editing = this.dataConvert.in(record);
+                }
+                else {
+                    this.edit(angular.extend({}, this.model));
+                }
+            },
+            save: function () {
+                if(this.editing[this.ID_NAME]){
+                    ParametroFactory.update(this.dataConvert.out(this.editing), function (data) {
+                    });
+                }
+                else {
+                    ParametroFactory.save(this.dataConvert.out(this.editing), function (data) {
+                    });
+                }
+                this.clear();
+            },
+            clear:function(){
+                this.editing = null;
+            },
+            changeTipoDado : function(tipoDado){
+                if(tipoDado=3){
+                    this.habilitaCampo2 = true;
+
+                }else {
+                    this.habilitaCampo2 = false;
+                    delete this.editing.tipoValor2;
+                }
+            }
+        }
         if (ctrl.recordID) {
             if (ctrl.recordID > 0) {
                 DispositivoFactory.get({id: ctrl.recordID}, function (data) {
@@ -112,7 +171,98 @@ angular.module("cdweb")
             });
         }
     }])
+    .controller("PerfilController",['$scope','$q', 'PerfilFactory','NgTableParams','$routeParams', '$location', function($scope, $q, PerfilFactory,NgTableParams, $routeParams, $location){
+        $scope.$root.header = true;
+        var ctrl = this;
+        ctrl.objPrincipal = "perfil";
+        ctrl.params = $routeParams;
+        ctrl.recordID = $routeParams && $routeParams.id?$routeParams.id:undefined;
+        ctrl.voltarLista = function () {
+            $location.path('/perfil')
+        }
+        var obj = ctrl[ctrl.objPrincipal] = {
+            ID_NAME: "idPerfil",
+            model: {
+                nome: "",
+                descricao: ""
+            },
+            editable:true,
+            editing: null,
+            dataConvert:{
+                in: function (data) {
+                    return data;
+                },
+                out: function (data) {
+                    return data;
+                }
+            },
+            clear: function () {
+                obj.editing = null;
+            },
+            edit: function (record) {
+                if (record) {
+                    var tempRecord = angular.extend({}, record);
+                    obj.editing = obj.convertData && obj.convertData.in ? obj.convertData.in(tempRecord) : tempRecord;
+                }
+                else {
+                    record = angular.extend({}, obj.model);
+                    obj.edit(record);
+                }
+            },
+            save: function (record) {
+                var tempRecord = angular.extend({}, record || obj.editing);
+                tempRecord = obj.convertData && obj.convertData.out ? obj.convertData.out(tempRecord) : tempRecord;
+                if(obj.editing[obj.ID_NAME]){
+                    PerfilFactory.update(tempRecord, function (data) {
+                        ctrl.voltarLista();
+                    });
+                }
+                else {
+                    PerfilFactory.save(tempRecord, function (data) {
+                        ctrl.voltarLista();
+                    });
+                }
+                ctrl[ctrl.objPrincipal].clear();
+            },
+            delete: function (record) {
+                record = record || obj.editing
+                PerfilFactory.delete({id: record[obj.ID_NAME]},function (){
+                    obj.clear();
+                });
 
+            }
+        }
+        if (ctrl.recordID) {
+            if (ctrl.recordID > 0) {
+                PerfilFactory.get({id: ctrl.recordID}, function (data) {
+                    obj.edit(data);
+                });
+            }
+            else {
+                obj.edit();
+            }
+        }
+        else {
+            obj.table = new NgTableParams({
+                page: 1, // show first page
+                count: 10 // count per page
+
+            }, {
+                counts: [],
+                getData: function (params) {
+                    var d = $q.defer();
+                    PerfilFactory.query().$promise.then(function (data) {
+                        params.total(data.length);
+                        d.resolve(data);
+                    }, function (e) {
+                        d.reject(e);
+                    });
+
+                    return d.promise;
+                }
+            });
+        }
+    }])
     .controller("UsuarioController",['$scope', 'UserFactory','$routeParams', '$location', function($scope, UserFactory, $routeParams, $location){
         $scope.menu = "Menu da ";
         $scope.nome = "";
@@ -135,45 +285,6 @@ angular.module("cdweb")
 
         $scope.buscarusuario(1);
     }])
-    
-    .controller("ModeloDispositivoController2",['$scope', 'DispositivoFactory','$routeParams', '$location', 'ModeloDispositivoFactory', 'ModeloAcaoFactory',  function($scope, DispositivoFactory, $routeParams, $location, ModeloDispositivoFactory, ModeloAcaoFactory){
-        $scope.dispositivos = DispositivoFactory.query(); 
-        $scope.nome = "";
-        $scope.$root.header = true;
-        $scope.modelo = {};
-        $scope.modeloacao = {};
-        
-
-        $scope.$watch("modelo.dispositivo", function(newValue,oldValue){
-        	if(newValue){
-        		$scope.parametros = DispositivoFactory.getParametros(newValue)	
-        	}
-        	else{
-        		$scope.parametros = null;
-        	}
-        	
-        })
-        $scope.buscar= function(idModeloAcao) {
-//        	$scope.modelo = ModelFactory.show({id: idModeloAcao});
-
-        }        
-        $scope.cancelar = function(){
-        	  $location.path('/menu');
-        }
-                
-        $scope.gravar = function () {
-        	ModeloDispositivoFactory[$scope.modelo.idDispositivo?"update":"save"]($scope.modelo, function(dadosModeloDispositivo){
-        		$scope.modeloacao.modeloDispositivo = dadosModeloDispositivo;
-        		ModeloAcaoFactory[$scope.modeloacao.idAcao?"update":"save"]($scope.modeloacao);
-
-                $location.path('/menu');
-        	});        	
-        };
-
-        
-    }])
-
-
     .controller("ModeloDispositivoController", ['$scope','NgTableParams',"$filter", "$q",'ModeloDispositivoFactory','DispositivoFactory',"$routeParams",'$location','$uibModal', function ($scope,NgTableParams,$filter, $q,ModeloDispositivoFactory,DispositivoFactory,$routeParams,$location,$uibModal) {
         var ctrl = this;
         ctrl.objPrincipal = "modelodispositivo";
@@ -260,24 +371,24 @@ angular.module("cdweb")
             },
             save: function (record) {
                 record = record ? record : ctrl.modeloAcao.editing;
-                ctrl.schedule.form.$setDirty();
+                this.form.$setDirty();
 
-                var indexArray = ctrl.modeloAcao.isInArray(record, ctrl.schedule.editing.scheduleParams);
+                var indexArray = ctrl.modeloAcao.isInArray(record, this.editing.scheduleParams);
                 var isNewRecord = indexArray == -1;
                 if (!isNewRecord) {
-                    ctrl.schedule.editing.scheduleParams.splice(indexArray, 1);
+                    this.editing.scheduleParams.splice(indexArray, 1);
                 }
 
-                if (record.paramOrder < ctrl.modeloAcao.calculateNextOrder(ctrl.schedule.editing.scheduleParams)) {
-                    ctrl.schedule.editing.scheduleParams.push(ctrl.modeloAcao.calculateOrders(record, ctrl.schedule.editing.scheduleParams));
+                if (record.paramOrder < ctrl.modeloAcao.calculateNextOrder(this.editing.scheduleParams)) {
+                    this.editing.scheduleParams.push(ctrl.modeloAcao.calculateOrders(record, this.editing.scheduleParams));
                 }
                 else {
-                    ctrl.schedule.editing.scheduleParams.push(record);
+                    this.editing.scheduleParams.push(record);
                 }
 
                 if (!isNewRecord) {
-                    ctrl.modeloAcao.resetOrder(ctrl.schedule.editing.scheduleParams);
-                    ctrl.schedule.editing.scheduleParams.sort(function (a, b) {
+                    ctrl.modeloAcao.resetOrder(this.editing.scheduleParams);
+                    this.editing.scheduleParams.sort(function (a, b) {
                         return a.paramOrder - b.paramOrder
                     });
                 }
@@ -288,9 +399,9 @@ angular.module("cdweb")
                 if (record[this.ID_NAME]) {
                     ctrl.modeloAcao.removeList.push(record);
                 }
-                for (var idx = 0; ctrl.schedule.editing.scheduleParams.length; idx++) {
-                    if (record == ctrl.schedule.editing.scheduleParams[idx]) {
-                        ctrl.schedule.editing.scheduleParams.splice(idx, 1);
+                for (var idx = 0; this.editing.scheduleParams.length; idx++) {
+                    if (record == this.editing.scheduleParams[idx]) {
+                        this.editing.scheduleParams.splice(idx, 1);
                         break;
                     }
                 }

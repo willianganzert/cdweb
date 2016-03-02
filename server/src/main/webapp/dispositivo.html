@@ -20,18 +20,95 @@
             </div>
             <div class="form-group">
                 <label for="nome">Nome</label>
-                    <input type="text" class="form-control" id="nome" ng-model="ctrl.dispositivo.editing.nome"
+                <input type="text" class="form-control" id="nome" ng-model="ctrl.dispositivo.editing.nome"
                        ng-disabled="!ctrl.dispositivo.editable">
             </div>
         </form>
+        <div class="form-group">
+            <div class="panel panel-default">
+                <div class="panel-heading" style="height: 50px;">
+                    <div class="pull-left">
+                        Modelos de Ações
+                    </div>
+                    <div class="pull-right">
+
+                        <div class="btn btn-default glyphicon glyphicon-erase" ng-show="ctrl.parametro.editing"
+                             ng-click="ctrl.parametro.clear();"></div>
+                        <div class="btn btn-default glyphicon glyphicon-minus"
+                             ng-show="ctrl[ctrl.objPrincipal].editable && ctrl.parametro.editing"
+                             ng-click="ctrl.parametro.delete(ctrl.parametro.editing);"></div>
+                        <div class="btn btn-default glyphicon glyphicon-plus"
+                             ng-show="ctrl[ctrl.objPrincipal].editable && !ctrl.parametro.editing"
+                             ng-click="ctrl.parametro.edit();"></div>
+                        <div class="btn btn-default glyphicon glyphicon-floppy-disk"
+                             ng-show="ctrl[ctrl.objPrincipal].editable && ctrl.parametro.editing"
+                             ng-click="ctrl.parametro.save();"></div>
+                    </div>
+                </div>
+                <div class="panel-body" ng-show="ctrl.parametro.editing">{{}}
+                    <div class="form-group">
+                        <label for="nomeparam">Parametro:</label>
+                        <input type="text" id="nomeparam" class="form-control" id="descricao"
+                               ng-model="ctrl.parametro.editing.nome" required="true"
+                               ng-disabled="!ctrl[ctrl.objPrincipal].editable">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tipoparam">Tipo Dado:</label>
+                        <select type="text" id="tipoparam" class="form-control"
+                               ng-model="ctrl.parametro.editing.tipo" required="true"
+                                ng-change="ctrl.parametro.changeTipoDado(ctrl.parametro.editing.tipo)"
+                               ng-disabled="!ctrl[ctrl.objPrincipal].editable">
+                            <option ng-value="1" ng-selected="ctrl.parametro.editing.tipo == 1">TEXTO</option>
+                            <option ng-value="2" ng-selected="ctrl.parametro.editing.tipo == 2">NUMERICO</option>
+                            <option ng-value="3" ng-selected="ctrl.parametro.editing.tipo == 3">INTERVALO</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="valor1">Valor 1:</label>
+                        <input type="text" id="valor1" class="form-control"
+                               ng-model="ctrl.parametro.editing.tipoValor" required="true"
+                               ng-disabled="!ctrl[ctrl.objPrincipal].editable">
+                    </div>
+                    <div class="form-group">
+                        <label for="valor2">Valor 2:</label>
+                        <input type="text" id="valor2" class="form-control"
+                               ng-model="ctrl.parametro.editing.tipoValor2" required="true"
+                               ng-disabled="!ctrl[ctrl.objPrincipal].editable">
+                    </div>
+
+                </div>
+                <table ng-table="" class="table table-condensed table-bordered table-striped table-hover">
+                    <tr ng-repeat="row in ctrl[ctrl.objPrincipal].editing.parametros|orderBy:'idModeloAcao'"
+                        ng-click="ctrl.parametro.edit(row)">
+                        <td data-title="'ID'" header-class="'col-md-1'" class="text-center">{{row.id}}</td>
+                        <td data-title="'Nome'" header-class="'col-md-1'" class="text-center">{{row.nome}}</td>
+                        <td data-title="'Tipo'" class="text-center">{{row.tipo}}</td>
+                        <td data-title="'Valor'" header-class="'col-md-2'" class="text-center">
+                            {{'Valor1='+row.tipoValor}}{{';Valor2='+row.tipoValor2}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
     <div ng-if="ctrl.recordID === undefined" class="container-fluid">
         <div class="row">
-            <a ng-href="#/dispositivo/0" class="btn btn-success">Novo registro</a>
-            <p></p>
+            <div class="form-group">
+                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                    <div class="btn-group pull-left" role="group" aria-label="First group">
+                        <a class="btn btn-default glyphicon glyphicon-arrow-left" ng-href="#/menu"></a>
+                    </div>
+                    <div class="btn-group pull-right" role="group" aria-label="First group">
+                        <a ng-href="#/dispositivo/0" class="btn btn-success">Novo registro</a>
+                    </div>
+
+                </div>
+            </div>
             <table ng-table="ctrl.dispositivoTable" style="position: relative"
                    class=" table table-condensed table-bordered table-striped table-hover">
-                <tr ng-repeat="row in $data" style="cursor:pointer" ng-click="$root.go('/dispositivo/'+row.idDispositivo)">
+                <tr ng-repeat="row in $data" style="cursor:pointer"
+                    ng-click="$root.go('/dispositivo/'+row.idDispositivo)">
                     <td data-title="'ID'" header-class="'col-md-2'" class="text-center">{{row.idDispositivo}}</td>
                     <td data-title="'Nome'" header-class="'col-md-10'" class="text-center">{{row.nome}}</td>
 

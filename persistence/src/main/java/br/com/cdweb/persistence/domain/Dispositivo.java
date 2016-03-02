@@ -1,14 +1,21 @@
 package br.com.cdweb.persistence.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name="dispositivo")
@@ -25,6 +32,11 @@ public class Dispositivo extends ComunEntidades implements Serializable{
 	private long idDispositivo;
 
 	private String nome;
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="id_dispositivo")
+	@JsonManagedReference
+    private List<Parametro> parametros;
 	
 	public Dispositivo() {
 		// TODO Auto-generated constructor stub
@@ -44,6 +56,14 @@ public class Dispositivo extends ComunEntidades implements Serializable{
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public List<Parametro> getParametros() {
+		return parametros;
+	}
+
+	public void setParametros(List<Parametro> parametros) {
+		this.parametros = parametros;
 	}
 
 }

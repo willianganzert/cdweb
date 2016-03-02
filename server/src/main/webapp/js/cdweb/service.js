@@ -31,6 +31,25 @@ services.factory('DispositivoFactory', function ($resource) {
     })
 });
 
+services.factory('PerfilFactory', function ($resource) {
+    return $resource('http://localhost:8080/server/rest/perfis/:id', {}, {
+        get: { method: 'GET',params: {id: '@idPerfil'}},
+        query: { method: 'GET', isArray:true},
+        save: { method: 'POST'},
+        update: { method: 'PUT', params: {id: '@idPerfil'} },
+        delete: { method: 'DELETE', params: {id: '@idPerfil'} }
+    })
+});
+
+services.factory('ParametroFactory', function ($resource) {
+    return $resource('http://localhost:8080/server/rest/parametros/:id/:parametros', {}, {
+        get: { method: 'GET',params: {id: '@idParametro'}},
+        query: { method: 'GET', isArray:true},
+        save: { method: 'POST'},
+        update: { method: 'PUT', params: {id: '@idParametro'} },
+        delete: { method: 'DELETE', params: {id: '@idParametro'} }
+    })
+});
 
 services.factory('ModeloDispositivoFactory', function ($resource) {
     return $resource('http://localhost:8080/server/rest/modelosdispositivo/:id', {}, {
