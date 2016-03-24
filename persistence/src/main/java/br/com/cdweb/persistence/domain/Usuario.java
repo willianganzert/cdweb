@@ -11,8 +11,6 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 @Entity
 @Table(name="usuario")
 @SequenceGenerator(name="usuario_id_usuario_seq", sequenceName="usuario_id_usuario_seq", allocationSize=1)	
@@ -23,6 +21,14 @@ public class Usuario  extends ComunEntidades implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 2972313420767777806L;
+	
+	public Usuario() {
+	
+	}
+	public Usuario(long idUsuario) {
+		setIdUsuario(idUsuario);
+	}
+	
 
 	@Id    
     @GeneratedValue(generator="usuario_id_usuario_seq")	

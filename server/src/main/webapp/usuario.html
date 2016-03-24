@@ -1,34 +1,74 @@
-<div class="container">
-	<div class="card card-user-container">
-		<h3 class="cad cad-title">Cadastro de Usuário</h3>
+<div class="card card-dis-container">
+	<h3 class="cad conf-title">
+		Cadastro de Usuário
+	</h3>
+	<div ng-if="ctrl.recordID != undefined">
+		<form name="form_" ng-submit="ctrl[ctrl.objPrincipal].save()">
 
+			<div class="form-group">
+				<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+					<div class="btn-group pull-left" role="group" aria-label="First group">
+						<div class="btn btn-default glyphicon glyphicon-arrow-left" ng-click="ctrl.voltarLista()"></div>
+					</div>
+					<div class="btn-group pull-right" role="group" aria-label="First group">
+						<button type="submit" ng-disabled="!form_.$dirty"
+								class="btn btn-secondary glyphicon glyphicon-floppy-disk"></button>
+						<div class="btn btn-default glyphicon glyphicon-erase" ng-show="ctrl[ctrl.objPrincipal].editing"
+							 ng-click="ctrl[ctrl.objPrincipal].clear();"></div>
+					</div>
 
-		<div>
-			<form>
+				</div>
+			</div>
 
-				<label for="name">Nome:</label> <input type="text"
-					class="form-control" size="40" id="name" ng-model="user.nome" /> <label
-					for="email">Email:</label> <input type="email" class="form-control"
-					size="40" id="email" ng-model="user.login" />
-				<!--<img src="usuario.png" align="right" alt="Windows" width="150"/>-->
-				<label for="name">Senha:</label> <input type="password"
-					class="form-control" size="40" name="pass" ng-model="user.senha">
-				<!--         <label for="passconfirm">Confirme a senha: </label> -->
-				<!--         <input type="password" id="passconfirm" class="form-control"size="40" name="pass"> -->
-				<label for="phonenum">Número de telefone:</label> <input
-					pattern="^[\d]+$" id="phonenum" class="form-control" type="tel"
-					ng-model="user.telefone">
-				<p>
-				<p>
-					<input type="reset" value="Salvar" class="btn btn-success"
-						ng-click="gravar()"> <input type="reset" value="Cancelar"
-						class="btn btn-success" ng-click="cancelar()">
+			<div class="form-group">
+				<label for="nome">Nome</label>
+				<input type="text" class="form-control" id="nome" ng-model="ctrl[ctrl.objPrincipal].editing.nome" required="true"
+					   ng-disabled="!ctrl[ctrl.objPrincipal].editable">
+			</div>
 
+			<div class="form-group">
+				<label for="email">E-mail</label>
+				<input type="text" class="form-control" id="email" ng-model="ctrl[ctrl.objPrincipal].editing.login" required="true"
+					   ng-disabled="!ctrl[ctrl.objPrincipal].editable">
+			</div>
 
-				</p>
+			<div class="form-group">
+				<label for="pass">Senha</label>
+				<input type="password" class="form-control" id="pass" ng-model="ctrl[ctrl.objPrincipal].editing.senha" required="true"
+					   ng-disabled="!ctrl[ctrl.objPrincipal].editable">
+			</div>
 
-			</form>		
+			<div class="form-group">
+				<label for="phonenum">Número de telefone</label>
+				<input type="text" class="form-control" id="phonenum" ng-model="ctrl[ctrl.objPrincipal].editing.telefone" required="true"
+					   ng-disabled="!ctrl[ctrl.objPrincipal].editable">
+			</div>
+		</form>
+	</div>
+	<div ng-if="ctrl.recordID === undefined" class="container-fluid">
+		<div class="row">
+			<div class="form-group">
+				<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+					<div class="btn-group pull-left" role="group" aria-label="First group">
+						<a class="btn btn-default glyphicon glyphicon-arrow-left" ng-href="#/menu"></a>
+					</div>
+					<div class="btn-group pull-right" role="group" aria-label="First group">
+						<a ng-href="#/usuario/0" class="btn btn-success">Novo registro</a>
+					</div>
 
+				</div>
+			</div>
+
+			<p></p>
+			<table ng-table="ctrl[ctrl.objPrincipal].table" style="position: relative"
+				   class=" table table-condensed table-bordered table-striped table-hover">
+				<tr ng-repeat="row in $data" style="cursor:pointer" ng-click="$root.go('/usuario/'+row[ctrl[ctrl.objPrincipal].ID_NAME])">
+					<td data-title="'ID'" header-class="'col-md-2'" class="text-center">{{row[ctrl[ctrl.objPrincipal].ID_NAME]}}</td>
+					<td data-title="'Nome'" header-class="'col-md-2'" class="text-center">{{row.nome}}</td>
+					<td data-title="'Login'" header-class="'col-md-8'" class="text-center">{{row.login}}</td>
+				</tr>
+			</table>
 		</div>
+
 	</div>
 </div>

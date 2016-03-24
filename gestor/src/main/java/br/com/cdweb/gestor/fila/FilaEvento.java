@@ -38,7 +38,7 @@ public class FilaEvento extends Fila<FilaEventoExecutar> implements RecebeEvento
 	@Override
 	protected boolean encaminhar(FilaEventoExecutar item) {
 		FilaEventoExecutar itemClone = (FilaEventoExecutar) item.clone();
-		itemClone.setIdFilaEventoExecutar(0);
+//		itemClone.setIdFilaEventoExecutar(0);
 		itemClone.setHoraInsercaoFila(null);
 		itemClone.setHoraExecucaoEvento(null);
 		recebeEventoEncaminhar.recebeEvento(itemClone);

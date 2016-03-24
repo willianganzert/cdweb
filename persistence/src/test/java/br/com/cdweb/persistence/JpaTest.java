@@ -3,6 +3,9 @@ package br.com.cdweb.persistence;
 import org.junit.Assert;
 import org.junit.Test;
 
+import br.com.cdweb.persistence.domain.Usuario;
+import br.com.cdweb.persistence.jpa.JpaAllEntities;
+
 public class JpaTest{
 	public static void main(String[] args) {
 		new JpaTest().testCRUD();
@@ -10,7 +13,7 @@ public class JpaTest{
 	
 	@Test
 	public void testCRUD(){
-//		JpaAllEntities.listAll(Usuario.class);
+		JpaAllEntities.listAll(Usuario.class);
 //		Usuario usuario = new Usuario();
 //		usuario.setLogin("mairalima");
 //		usuario.setSenha("mairalima");

@@ -28,7 +28,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading" style="height: 50px;">
                     <div class="pull-left">
-                        Modelos de Ações
+                        Parametros
                     </div>
                     <div class="pull-right">
 
@@ -79,7 +79,7 @@
 
                 </div>
                 <table ng-table="" class="table table-condensed table-bordered table-striped table-hover">
-                    <tr ng-repeat="row in ctrl[ctrl.objPrincipal].editing.parametros|orderBy:'idModeloAcao'"
+                    <tr ng-repeat="row in ctrl[ctrl.objPrincipal].editing.parametros|orderBy:'idParametro'"
                         ng-click="ctrl.parametro.edit(row)">
                         <td data-title="'ID'" header-class="'col-md-1'" class="text-center">{{row.id}}</td>
                         <td data-title="'Nome'" header-class="'col-md-1'" class="text-center">{{row.nome}}</td>

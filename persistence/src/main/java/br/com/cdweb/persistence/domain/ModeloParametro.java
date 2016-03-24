@@ -2,7 +2,6 @@ package br.com.cdweb.persistence.domain;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,7 +34,7 @@ public class ModeloParametro extends ComunEntidades implements Serializable{
 	private Parametro parametro;
 	
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne()
 	@JoinColumn(name="id_modelo_acao")
 	@JsonBackReference
 	private ModeloAcao modeloAcao;

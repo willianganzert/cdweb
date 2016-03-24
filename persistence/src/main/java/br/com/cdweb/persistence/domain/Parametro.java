@@ -2,7 +2,6 @@ package br.com.cdweb.persistence.domain;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,9 +30,9 @@ public class Parametro  extends ComunEntidades implements Serializable{
     @Column(name = "id_parametro", updatable=false)
 	private long idParametro;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "id_dispositivo")
-	@JsonBackReference
+	@JsonBackReference()
 	private Dispositivo dispositivo;
 	
 	

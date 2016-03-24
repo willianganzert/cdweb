@@ -67,10 +67,6 @@ public class Configuration {
 //		return inserido;
 //	}
 
-	private String getIPRequisicao() {
-		return hsr.getRemoteHost();
-	}
-
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response getIp(@Context HttpServletRequest req) {

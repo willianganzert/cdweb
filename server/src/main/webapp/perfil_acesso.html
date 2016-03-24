@@ -1,0 +1,47 @@
+<div class="card card-dis-container">
+    <div class="container-fluid">
+        <div class="row">
+            <h3 class="cad conf-title">
+                Perfil
+            </h3>
+            <div class="form-group">
+                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                    <div class="btn-group pull-left" role="group" aria-label="First group">
+                        <a class="btn btn-default glyphicon glyphicon-arrow-left" ng-href="#/menu"></a>
+                    </div>
+                    <div class="btn-group pull-right" role="group" aria-label="First group">
+                        <button type="button" ng-disabled="!ctrl.$dirty"
+                                class="btn btn-secondary glyphicon glyphicon-floppy-disk" ng-click="ctrl.save()"></button>
+                        <div class="btn btn-default glyphicon glyphicon-erase" ng-show="ctrl.perfilacesso"
+                             ng-click="ctrl.clear();"></div>
+                    </div>
+                </div>
+            </div>
+            <table ng-table="ctrl.perfil.table" style="position: relative"
+                   class=" table table-condensed table-bordered table-striped table-hover">
+                <tr ng-repeat="row in $data" style="cursor:pointer" ng-class="{'selected':ctrl.perfilID == row.idPerfil}"
+                    ng-click="$root.go('/perfilacesso/'+row.idPerfil)">
+                    <td data-title="'ID'" header-class="'col-md-2'" class="text-center">{{row.idPerfil}}</td>
+                    <td data-title="'Nome'" header-class="'col-md-10'" class="text-center">{{row.nome}}</td>
+
+                </tr>
+            </table>
+        </div>
+        <div class="row" ng-if="ctrl.perfilacesso">
+            <h3 class="cad conf-title">
+                Modelos Dispositivos
+            </h3>
+            <table ng-table="ctrl.perfilacesso.table" style="position: relative"
+                   class=" table table-condensed table-bordered table-striped table-hover">
+                <tr ng-repeat="row in $data" ng-click="ctrl.togglePerfil(row)" ng-class="{'selected':ctrl.hasAccess(row)}">
+                    <td data-title="'ID'" header-class="'col-md-2'" class="text-center">{{row.idModeloDispositivo}}</td>
+                    <td data-title="'Nome'" header-class="'col-md-10'" class="text-center">
+                        {{row.nome}}
+                    </td>
+
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</div>

@@ -39,7 +39,7 @@ public class FilaExecucao extends Fila<FilaEventoExecutar> implements RecebeEven
 	@Override
 	protected boolean encaminhar(FilaEventoExecutar item) {
 		FilaEventoExecutar itemClone = (FilaEventoExecutar) item.clone();
-		itemClone.setIdFilaEventoExecutar(0);
+//		itemClone.setIdFilaEventoExecutar(0);
 		itemClone.setHoraInsercaoFila(null);
 		itemClone.setHoraExecucaoEvento(null);
 		recebeEventoEncaminhar.recebeEvento(itemClone);

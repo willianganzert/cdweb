@@ -35,7 +35,7 @@ public class ModeloAcao extends ComunEntidades implements Serializable {
     @Column(name = "id_modelo_acao", updatable=false)
 	private long idModeloAcao;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne()
 	@JoinColumn(name = "id_modelo_dispositivo")
 	@JsonBackReference
 //	@XmlAttribute @XmlIDREF 

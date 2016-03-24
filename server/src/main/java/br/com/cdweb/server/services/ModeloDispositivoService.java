@@ -10,17 +10,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response.Status;
 
-import br.com.cdweb.persistence.domain.Dispositivo;
-import br.com.cdweb.persistence.domain.ModeloAcao;
 import br.com.cdweb.persistence.domain.ModeloDispositivo;
 import br.com.cdweb.persistence.domain.PerfilAcesso;
 import br.com.cdweb.persistence.domain.Usuario;
 import br.com.cdweb.persistence.domain.UsuarioPerfil;
 import br.com.cdweb.persistence.jpa.JpaAllEntities;
-import br.com.cdweb.persistence.type.OrderType;
-import br.com.cdweb.persistence.util.UtlEntity;
 import br.com.cdweb.persistence.vo.FieldValuesVo;
 import br.com.cdweb.persistence.vo.ResultFilterVo;
 import br.com.cdweb.server.filters.Secured;
@@ -59,11 +54,10 @@ public class ModeloDispositivoService extends TemplateCRUDService<ModeloDisposit
 			if (resultUserPerfil != null && resultUserPerfil.getResultQuery() != null
 					&& resultUserPerfil.getResultQuery().size() > 0) {
 				List<UsuarioPerfil> usuarioPerfils = resultUserPerfil.getResultQuery();
-				boolean hasAccess = false;
+				boolean hasAdmAccess = false;
 				for (UsuarioPerfil usuarioPerfil : usuarioPerfils) {
-					if (usuarioPerfil.getPerfil().getPerfisAcesso() == null
-							|| usuarioPerfil.getPerfil().getPerfisAcesso().size() > 0) {
-						hasAccess = true;
+					if (usuarioPerfil.getPerfil() != null && usuarioPerfil.getPerfil().getNome().toLowerCase().equals("administrador")) {
+						hasAdmAccess = true;
 						break;
 					}
 					for (PerfilAcesso perfilAcesso : usuarioPerfil.getPerfil().getPerfisAcesso()) {
@@ -71,9 +65,10 @@ public class ModeloDispositivoService extends TemplateCRUDService<ModeloDisposit
 					}
 
 				}
-			} else {
-				listDispo.addAll(JpaAllEntities.listAll(null, null, ModeloDispositivo.class));
-			}
+				if(hasAdmAccess){
+					listDispo.addAll(JpaAllEntities.listAll(null, null, ModeloDispositivo.class));
+				}
+			} 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

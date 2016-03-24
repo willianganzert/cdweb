@@ -33,14 +33,19 @@ public class Dispositivo extends ComunEntidades implements Serializable{
 
 	private String nome;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinColumn(name="id_dispositivo")
-	@JsonManagedReference
-    private List<Parametro> parametros;
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="dispositivo")
+	private List<Parametro> parametros;
 	
 	public Dispositivo() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	public Dispositivo(long idDispositivo) {
+		super();
+		this.idDispositivo = idDispositivo;
+	}
+
 
 	public long getIdDispositivo() {
 		return idDispositivo;

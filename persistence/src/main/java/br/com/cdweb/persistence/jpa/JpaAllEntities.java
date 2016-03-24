@@ -1,6 +1,7 @@
 package br.com.cdweb.persistence.jpa;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -31,6 +32,15 @@ public class JpaAllEntities {
 		T t = em.merge(entity);
 		em.close();
 		return t;
+	}
+    public static <T extends ComunEntidades> List<T> merge(List<T> entity){
+    	List<T> list =  new ArrayList<>();
+		EntityManager em = EntityManagerHelper.getEntityManager();
+		for (T t : entity) {
+			list.add(em.merge(t));
+		}		
+		em.close();
+		return list;
 	}
     
     public static void  detach(ComunEntidades entity){
@@ -66,6 +76,26 @@ public class JpaAllEntities {
  		    	em.close();
 		}
     	return entity;
+    }
+    public static <T extends ComunEntidades> List<T> refresh(List<T> entities){
+    	EntityManager em=null;
+    	try{
+	    	em = EntityManagerHelper.getEntityManager();
+	    	for (T t : entities) {
+	    		t = em.merge(t);
+		    	em.refresh(t);
+		    	em.detach(t);
+			}
+	    	
+    	}catch (Exception e) {
+    		String msg="Exceção em refresh, parâmetros: entities";
+		          System.out.println(msg + " - Exception: " + e);
+		    throw new JpaException(msg, e);
+		}finally{
+			if(em!=null && em.isOpen())
+ 		    	em.close();
+		}
+    	return entities;
     }
     
     /*public static <T extends ComunEntidades> ResultFilterVo<T> doFilter(int firstResult, int maxResult, Class<T> entity, FieldValuesVo... fieldValuesVos){

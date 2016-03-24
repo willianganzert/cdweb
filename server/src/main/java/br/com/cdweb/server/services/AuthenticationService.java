@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -56,7 +55,7 @@ public class AuthenticationService {
     			}
             }
             else{
-            	builder.append("\"administrador\"");
+            	builder.append("");
             }
             
             return Response.ok("[\"" + token.getGeneratedToken() + "\",["+builder.toString()+"]]").build();

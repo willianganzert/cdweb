@@ -41,7 +41,9 @@ public class Perfil  extends ComunEntidades implements Serializable{
 	
 	public Perfil() {
 	}
-	
+	public Perfil(long idPerfil) {
+		setIdPerfil(idPerfil);
+	}
 	
 	public long getIdPerfil() {
 		return idPerfil;

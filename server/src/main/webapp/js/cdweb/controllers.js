@@ -263,31 +263,331 @@ angular.module("cdweb")
             });
         }
     }])
-    .controller("UsuarioController",['$scope', 'UserFactory','$routeParams', '$location', function($scope, UserFactory, $routeParams, $location){
-        $scope.menu = "Menu da ";
-        $scope.nome = "";
+    .controller("UsuarioController",['$scope','$q', 'UsuarioFactory','NgTableParams','$routeParams', '$location', function($scope, $q, UsuarioFactory,NgTableParams, $routeParams, $location){
         $scope.$root.header = true;
-        $scope.user = {};
-
-        $scope.buscarusuario = function(idUsuario) {
-        	$scope.user = UserFactory.show({id: idUsuario});
-
-        }        
-        $scope.cancelar = function(){
-        	  $location.path('/menu');
+        var ctrl = this;
+        ctrl.objPrincipal = "usuario";
+        ctrl.params = $routeParams;
+        ctrl.recordID = $routeParams && $routeParams.id?$routeParams.id:undefined;
+        ctrl.voltarLista = function () {
+            $location.path('/usuario')
         }
-                
-        $scope.gravar = function () {
-            UserFactory.update($scope.user);
-            $location.path('/menu');
-        };
+        var obj = ctrl[ctrl.objPrincipal] = {
+            ID_NAME: "idUsuario",
+            model: {
+                nome: "",
+                descricao: ""
+            },
+            editable:true,
+            editing: null,
+            dataConvert:{
+                in: function (data) {
+                    return data;
+                },
+                out: function (data) {
+                    return data;
+                }
+            },
+            clear: function () {
+                obj.editing = null;
+            },
+            edit: function (record) {
+                if (record) {
+                    var tempRecord = angular.extend({}, record);
+                    obj.editing = obj.convertData && obj.convertData.in ? obj.convertData.in(tempRecord) : tempRecord;
+                }
+                else {
+                    record = angular.extend({}, obj.model);
+                    obj.edit(record);
+                }
+            },
+            save: function (record) {
+                var tempRecord = angular.extend({}, record || obj.editing);
+                tempRecord = obj.convertData && obj.convertData.out ? obj.convertData.out(tempRecord) : tempRecord;
+                if(obj.editing[obj.ID_NAME]){
+                    UsuarioFactory.update(tempRecord, function (data) {
+                        ctrl.voltarLista();
+                    });
+                }
+                else {
+                    UsuarioFactory.save(tempRecord, function (data) {
+                        ctrl.voltarLista();
+                    });
+                }
+                ctrl[ctrl.objPrincipal].clear();
+            },
+            delete: function (record) {
+                record = record || obj.editing
+                UsuarioFactory.delete({id: record[obj.ID_NAME]},function (){
+                    obj.clear();
+                });
 
+            }
+        }
+        if (ctrl.recordID) {
+            if (ctrl.recordID > 0) {
+                UsuarioFactory.get({id: ctrl.recordID}, function (data) {
+                    obj.edit(data);
+                });
+            }
+            else {
+                obj.edit();
+            }
+        }
+        else {
+            obj.table = new NgTableParams({
+                page: 1, // show first page
+                count: 10 // count per page
 
-        $scope.buscarusuario(1);
+            }, {
+                counts: [],
+                getData: function (params) {
+                    var d = $q.defer();
+                    UsuarioFactory.query().$promise.then(function (data) {
+                        params.total(data.length);
+                        d.resolve(data);
+                    }, function (e) {
+                        d.reject(e);
+                    });
+
+                    return d.promise;
+                }
+            });
+        }
     }])
-    .controller("ModeloDispositivoController", ['$scope','NgTableParams',"$filter", "$q",'ModeloDispositivoFactory','DispositivoFactory',"$routeParams",'$location','$uibModal', function ($scope,NgTableParams,$filter, $q,ModeloDispositivoFactory,DispositivoFactory,$routeParams,$location,$uibModal) {
+    .controller("DispositivoAcaoController", ['$scope','NgTableParams',"$filter", "$q",'ModeloDispositivoFactory',"DispositivoAcao","$routeParams",'$location','$uibModal', function ($scope,NgTableParams,$filter, $q,ModeloDispositivoFactory,DispositivoAcao,$routeParams,$location,$uibModal) {
         var ctrl = this;
         ctrl.objPrincipal = "modelodispositivo";
+        ctrl.idObjPrincipal = "idModeloDispositivo";
+
+        ctrl.params = $routeParams;
+        ctrl.usuarioID = $routeParams && $routeParams.id?$routeParams.id:undefined;
+
+
+        ctrl.executarAcao = function(acao){
+            acao.executing = true;
+            DispositivoAcao.execute(acao, function(fim){
+                delete acao.executing;
+            });
+        }
+
+        /*$scope.dispositivos = ModeloDispositivoFactory.query();*/
+        ctrl[ctrl.objPrincipal]={};
+        ctrl[ctrl.objPrincipal].table = new NgTableParams({
+            page: 1, // show first page
+            count: 10 // count per page
+
+        }, {
+            counts: [],
+            getData: function (params) {
+                var d = $q.defer();
+                ModeloDispositivoFactory.query().$promise.then(function (data) {
+                    params.total(data.length);
+                    d.resolve(data);
+                }, function (e) {
+                    d.reject(e);
+                });
+
+                return d.promise;
+            }
+        });
+
+        if(ctrl.usuarioID){
+            ctrl.modeloacao = {};
+            ctrl.modeloacao.table = new NgTableParams({
+                page: 1, // show first page
+                count: 10 // count per page
+
+            }, {
+                counts: [],
+                getData: function (params) {
+                    var d = $q.defer();
+                    ModeloDispositivoFactory.get({id:ctrl.usuarioID}).$promise.then(function (data) {
+                        params.total(data.modeloAcoes.length);
+                        d.resolve(data.modeloAcoes);
+                    }, function (e) {
+                        d.reject(e);
+                    });
+
+                    return d.promise;
+                }
+            });
+        }
+
+
+        ctrl.params = $routeParams;
+        ctrl.voltarLista = function () {
+            $location.path('/modelodispositivo')
+        }
+
+    }])
+    .controller("UsuarioPerfilController", ['$scope','NgTableParams',"$filter", "$q",'UserFactory',"PerfilFactory","UsuariosPerfilFactory","$routeParams",'$location','$uibModal',"$route", function ($scope,NgTableParams,$filter, $q,UserFactory,PerfilFactory,UsuariosPerfilFactory,$routeParams,$location,$uibModal,$route) {
+        var ctrl = this;
+        ctrl.objPrincipal = "usuario";
+        ctrl.idObjPrincipal = "idUsuario";
+
+        ctrl.params = $routeParams;
+        ctrl.usuarioID = $routeParams && $routeParams.id?$routeParams.id:undefined;
+
+        ctrl.usuarioPerfis = [];
+        ctrl.hasAccess = function(perfil){
+            return ctrl.usuarioPerfis.indexOf(perfil.idPerfil) != -1
+        }
+        ctrl.togglePerfil = function(perfil){
+            ctrl.$dirty = true;
+            if(ctrl.usuarioPerfis.indexOf(perfil.idPerfil) != -1){
+                ctrl.usuarioPerfis.splice(ctrl.usuarioPerfis.indexOf(perfil.idPerfil),1);
+            }
+            else{
+                ctrl.usuarioPerfis.push(perfil.idPerfil);
+            }
+        }
+        ctrl.save = function(){
+            ctrl.$dirty = true;
+            UsuariosPerfilFactory.update({id:ctrl.usuarioID}, ctrl.usuarioPerfis, function(){
+                ctrl.clear();
+            })
+        }
+        ctrl.clear = function(){
+            $route.reload();
+        }
+
+        /*$scope.dispositivos = ModeloDispositivoFactory.query();*/
+        ctrl[ctrl.objPrincipal]={};
+        ctrl[ctrl.objPrincipal].table = new NgTableParams({
+            page: 1, // show first page
+            count: 10 // count per page
+
+        }, {
+            counts: [],
+            getData: function (params) {
+                var d = $q.defer();
+                UserFactory.query().$promise.then(function (data) {
+                    params.total(data.length);
+                    d.resolve(data);
+                }, function (e) {
+                    d.reject(e);
+                });
+
+                return d.promise;
+            }
+        });
+
+        if(ctrl.usuarioID){
+            ctrl.usuarioPerfis.splice(0,1000);
+            UsuariosPerfilFactory.getPerfis({id:ctrl.usuarioID}, function(data){
+                for(var a = 0; a<data.length; a++){
+                    ctrl.usuarioPerfis.push(data[a])
+                }
+
+            })
+            ctrl.usuarioperfil = {};
+            ctrl.usuarioperfil.table = new NgTableParams({
+                page: 1, // show first page
+                count: 10 // count per page
+
+            }, {
+                counts: [],
+                getData: function (params) {
+                    var d = $q.defer();
+                    PerfilFactory.query().$promise.then(function (data) {
+                        params.total(data.length);
+                        d.resolve(data);
+                    }, function (e) {
+                        d.reject(e);
+                    });
+
+                    return d.promise;
+                }
+            });
+        }
+
+    }])
+    .controller("PerfilAcessoController", ['$scope','NgTableParams',"$filter", "$q",'PerfilFactory',"ModeloDispositivoFactory","PerfilAcessoFactory","$routeParams",'$location','$uibModal',"$route", function ($scope,NgTableParams,$filter, $q,PerfilFactory,ModeloDispositivoFactory,PerfilAcessoFactory,$routeParams,$location,$uibModal,$route) {
+        var ctrl = this;
+        ctrl.objPrincipal = "perfil";
+        ctrl.idObjPrincipal = "idPerfil";
+
+        ctrl.params = $routeParams;
+        ctrl.perfilID = $routeParams && $routeParams.id?$routeParams.id:undefined;
+
+        ctrl.perfiModelos = [];
+        ctrl.hasAccess = function(modeloDispositivo){
+            return ctrl.perfiModelos.indexOf(modeloDispositivo.idModeloDispositivo) != -1
+        }
+        ctrl.togglePerfil = function(modeloDispositivo){
+            ctrl.$dirty = true;
+            if(ctrl.perfiModelos.indexOf(modeloDispositivo.idModeloDispositivo) != -1){
+                ctrl.perfiModelos.splice(ctrl.perfiModelos.indexOf(modeloDispositivo.idModeloDispositivo),1);
+            }
+            else{
+                ctrl.perfiModelos.push(modeloDispositivo.idModeloDispositivo);
+            }
+        }
+        ctrl.save = function(){
+            ctrl.$dirty = true;
+            PerfilAcessoFactory.update({id:ctrl.perfilID}, ctrl.perfiModelos, function(){
+                ctrl.clear();
+            })
+        }
+        ctrl.clear = function(){
+            $route.reload();
+        }
+
+
+        ctrl[ctrl.objPrincipal]={};
+        ctrl[ctrl.objPrincipal].table = new NgTableParams({
+            page: 1, // show first page
+            count: 10 // count per page
+
+        }, {
+            counts: [],
+            getData: function (params) {
+                var d = $q.defer();
+                PerfilFactory.query().$promise.then(function (data) {
+                    params.total(data.length);
+                    d.resolve(data);
+                }, function (e) {
+                    d.reject(e);
+                });
+
+                return d.promise;
+            }
+        });
+
+        if(ctrl.perfilID){
+            ctrl.perfiModelos.splice(0,1000);
+            PerfilAcessoFactory.getPerfis({id:ctrl.perfilID}, function(data){
+                for(var a = 0; a<data.length; a++){
+                    ctrl.perfiModelos.push(data[a])
+                }
+
+            })
+            ctrl.perfilacesso = {};
+            ctrl.perfilacesso.table = new NgTableParams({
+                page: 1, // show first page
+                count: 10 // count per page
+
+            }, {
+                counts: [],
+                getData: function (params) {
+                    var d = $q.defer();
+                    ModeloDispositivoFactory.query().$promise.then(function (data) {
+                        params.total(data.length);
+                        d.resolve(data);
+                    }, function (e) {
+                        d.reject(e);
+                    });
+
+                    return d.promise;
+                }
+            });
+        }
+
+    }])
+    .controller("ModeloDispositivoController", ['$scope','NgTableParams',"$filter", "$q",'ModeloDispositivoFactory','DispositivoFactory','ModeloAcaoFactory',"$routeParams",'$location','$uibModal', function ($scope,NgTableParams,$filter, $q,ModeloDispositivoFactory,DispositivoFactory,ModeloAcaoFactory,$routeParams,$location,$uibModal) {
+        var ctrl = this;
+        ctrl.objPrincipal = "modeloDispositivo";
         ctrl.idObjPrincipal = "idModeloDispositivo";
 
         $scope.dispositivos = DispositivoFactory.query();
@@ -356,6 +656,18 @@ angular.module("cdweb")
             },
             editing: null,
             removeList: [],
+            dataConvert:{
+                in: function (data) {
+                    return data;
+                },
+                out: function (data) {
+                    if(ctrl.modeloDispositivo.editing[ctrl.idObjPrincipal]){
+                        data.modeloDispositivo = {};
+                        data.modeloDispositivo[ctrl.idObjPrincipal] = ctrl.modeloDispositivo.editing[ctrl.idObjPrincipal];
+                    }
+                    return data;
+                }
+            },
             clear: function () {
                 ctrl.modeloAcao.editing = null;
             },
@@ -369,31 +681,17 @@ angular.module("cdweb")
                     ctrl.modeloAcao.edit(record);
                 }
             },
-            save: function (record) {
-                record = record ? record : ctrl.modeloAcao.editing;
-                this.form.$setDirty();
 
-                var indexArray = ctrl.modeloAcao.isInArray(record, this.editing.scheduleParams);
-                var isNewRecord = indexArray == -1;
-                if (!isNewRecord) {
-                    this.editing.scheduleParams.splice(indexArray, 1);
-                }
-
-                if (record.paramOrder < ctrl.modeloAcao.calculateNextOrder(this.editing.scheduleParams)) {
-                    this.editing.scheduleParams.push(ctrl.modeloAcao.calculateOrders(record, this.editing.scheduleParams));
-                }
-                else {
-                    this.editing.scheduleParams.push(record);
-                }
-
-                if (!isNewRecord) {
-                    ctrl.modeloAcao.resetOrder(this.editing.scheduleParams);
-                    this.editing.scheduleParams.sort(function (a, b) {
-                        return a.paramOrder - b.paramOrder
+            save: function () {
+                if(this.editing[this.ID_NAME]){
+                    ModeloAcaoFactory.update(this.dataConvert.out(this.editing), function (data) {
                     });
                 }
-
-                ctrl.modeloAcao.clear();
+                else {
+                    ModeloAcaoFactory.save(this.dataConvert.out(this.editing), function (data) {
+                    });
+                }
+                this.clear();
             },
             delete: function (record) {
                 if (record[this.ID_NAME]) {
@@ -527,7 +825,8 @@ angular.module("cdweb")
             $scope.modeloAcao.modeloParametros.push({parametro:null,valorParametroAcao: ""});
         };
         $scope.ok=function(){
-            $scope.$close($scope.selected.item);
+            //$scope.$close($scope.selected.item);
+            $scope.$close();
         };
         $scope.cancel = function(){
             $scope.$dismiss('cancel');

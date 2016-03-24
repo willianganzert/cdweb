@@ -21,6 +21,5 @@ public class PerfilService extends TemplateCRUDService<Perfil>{
 		super(type);
 		// TODO Auto-generated constructor stub
 	}
-
- 
+	
 }

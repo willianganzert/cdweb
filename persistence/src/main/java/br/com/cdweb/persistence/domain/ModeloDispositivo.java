@@ -30,6 +30,13 @@ public class ModeloDispositivo extends ComunEntidades implements Serializable{
 	 */
 	private static final long serialVersionUID = 5072581408493829746L;
 	
+	public ModeloDispositivo() {
+		
+	}
+	public ModeloDispositivo(long idModeloDispositivo) {
+		this.idModeloDispositivo = idModeloDispositivo;
+	}
+	
 	@Id    
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator="modelo_dispositivo_id_modelo_dispositivo_seq")	
     @Column(name = "id_modelo_dispositivo", updatable=false)
@@ -52,11 +59,7 @@ public class ModeloDispositivo extends ComunEntidades implements Serializable{
 	@JsonManagedReference
     private List<ModeloAcao> modeloAcoes;
 	
-	public ModeloDispositivo() {
-	
-	}
-	
-	
+		
 	public long getIdModeloDispositivo() {
 		return idModeloDispositivo;
 	}

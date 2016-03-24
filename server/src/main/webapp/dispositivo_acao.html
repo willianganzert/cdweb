@@ -1,0 +1,44 @@
+<div class="card card-dis-container">
+    <div class="container-fluid">
+        <div class="row">
+            <h3 class="cad conf-title">
+                Dispositivos Casa
+            </h3>
+            <div class="form-group">
+                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                    <div class="btn-group pull-left" role="group" aria-label="First group">
+                        <a class="btn btn-default glyphicon glyphicon-arrow-left" ng-href="#/menu"></a>
+                    </div>
+                </div>
+            </div>
+            <table ng-table="ctrl.modelodispositivo.table" style="position: relative"
+                   class=" table table-condensed table-bordered table-striped table-hover">
+                <tr ng-repeat="row in $data" style="cursor:pointer" ng-class="{'selected':ctrl.usuarioID == row.idModeloDispositivo}"
+                    ng-click="$root.go('/dispositivoacao/'+row.idModeloDispositivo)">
+                    <td data-title="'ID'" header-class="'col-md-2'" class="text-center">{{row.idModeloDispositivo}}</td>
+                    <td data-title="'Nome'" header-class="'col-md-10'" class="text-center">{{row.nome}}</td>
+
+                </tr>
+            </table>
+        </div>
+        <div class="row" ng-if="ctrl.modeloacao">
+            <h3 class="cad conf-title">
+                Acoes
+            </h3>
+            <table ng-table="ctrl.modeloacao.table" style="position: relative"
+                   class=" table table-condensed table-bordered table-striped table-hover">
+                <tr ng-repeat="row in $data">
+                    <td data-title="'ID'" header-class="'col-md-2'" class="text-center">{{row.idModeloAcao}}</td>
+                    <td data-title="'Nome'" header-class="'col-md-10'" class="text-center">
+                        <button class="btn btn-lg btn-default" type="button" ng-click="ctrl.executarAcao(row)" ng-hide="row.executing">{{row.nome}}</button>
+                        <button class="btn btn-lg btn-default" ng-show="row.executing">
+                            <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...
+                        </button>
+                    </td>
+
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</div>

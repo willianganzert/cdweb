@@ -6,7 +6,14 @@ angular.module("cdweb")
         $routeProvider
             .when('/usuario', {
                 templateUrl: 'usuario.html',
-                controller:'UsuarioController'
+                controller:'UsuarioController',
+                controllerAs:"ctrl"
+            })
+
+            .when('/usuario/:id', {
+                templateUrl: 'usuario.html',
+                controller:'UsuarioController',
+                controllerAs:"ctrl"
             })
             .when('/login', {
                 templateUrl: 'login.html',
@@ -30,6 +37,30 @@ angular.module("cdweb")
                 templateUrl: 'menu.html',
                 controller: 'MenuController'
             })
+
+            .when('/usuarioperfil/:id', {
+                templateUrl: 'usuario_perfil.html',
+                controller: 'UsuarioPerfilController',
+                controllerAs:"ctrl"
+            })
+
+            .when('/usuarioperfil', {
+                templateUrl: 'usuario_perfil.html',
+                controller: 'UsuarioPerfilController',
+                controllerAs:"ctrl"
+            })
+            .when('/dispositivoacao/:id', {
+                templateUrl: 'dispositivo_acao.html',
+                controller: 'DispositivoAcaoController',
+                controllerAs:"ctrl"
+            })
+
+            .when('/dispositivoacao', {
+                templateUrl: 'dispositivo_acao.html',
+                controller: 'DispositivoAcaoController',
+                controllerAs:"ctrl"
+            })
+
 
             .when('/dispositivo/:id', {
                 templateUrl: 'dispositivo.html',
@@ -70,6 +101,17 @@ angular.module("cdweb")
             .when('/perfil/:id', {
                 templateUrl: 'perfil.html',
                 controller:'PerfilController',
+                controllerAs:"ctrl"
+            })
+            .when('/perfilacesso/:id', {
+                templateUrl: 'perfil_acesso.html',
+                controller: 'PerfilAcessoController',
+                controllerAs:"ctrl"
+            })
+
+            .when('/perfilacesso', {
+                templateUrl: 'perfil_acesso.html',
+                controller: 'PerfilAcessoController',
                 controllerAs:"ctrl"
             })
 

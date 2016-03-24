@@ -8,7 +8,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import br.com.cdweb.persistence.domain.Dispositivo;
 import br.com.cdweb.persistence.domain.ModeloAcao;
 import br.com.cdweb.persistence.domain.ModeloParametro;
 import br.com.cdweb.persistence.domain.Parametro;

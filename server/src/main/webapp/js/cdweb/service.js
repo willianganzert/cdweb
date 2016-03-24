@@ -3,16 +3,55 @@
  */
 var services = angular.module('cdweb');
 
-//services.factory('UsersFactory', function ($resource) {
-//    return $resource('/ngdemo/web/users', {}, {
-//        query: { method: 'GET', isArray: true },
-//        create: { method: 'POST' }
-//    })
-//});
+services.factory('UsuarioFactory', function ($resource) {
+    return $resource('http://localhost:8080/server/rest/usuarios/:id', {}, {
+        get: { method: 'GET',params: {id: '@idUsuario'}},
+        query: { method: 'GET', isArray:true},
+        save: { method: 'POST'},
+        update: { method: 'PUT', params: {id: '@idUsuario'} },
+        delete: { method: 'DELETE', params: {id: '@idUsuario'} }
+    })
+});
+
+services.factory('DispositivoAcao', function ($resource) {
+    return $resource('http://localhost:8080/server/rest/acao/:id', {}, {
+        execute: { method: 'POST', params: {id: '@idModeloAcao'} }
+    })
+});
+
+services.factory('UsuariosPerfilFactory', function ($resource) {
+    return $resource('http://localhost:8080/server/rest/usuariosperfis/:id', {}, {
+        /*get: { method: 'GET',params: {id: '@idDispositivo'}},
+        query: { method: 'GET', isArray:true},
+        save: { method: 'POST'},
+        update: { method: 'PUT', params: {id: '@idDispositivo'} },
+        delete: { method: 'DELETE', params: {id: '@idDispositivo'} },*/
+        update: { method: 'PUT', params: {id: '@idUsuario'} },
+        getPerfis: { method: 'get',
+            url:'http://localhost:8080/server/rest/usuariosperfis/usuario/:id',
+            params: {id: '@idUsuario'}, isArray:true},
+    })
+});
+
+services.factory('PerfilAcessoFactory', function ($resource) {
+    return $resource('http://localhost:8080/server/rest/perfisacesso/:id', {}, {
+        /*get: { method: 'GET',params: {id: '@idDispositivo'}},
+         query: { method: 'GET', isArray:true},
+         save: { method: 'POST'},
+         update: { method: 'PUT', params: {id: '@idDispositivo'} },
+         delete: { method: 'DELETE', params: {id: '@idDispositivo'} },*/
+        update: { method: 'PUT', params: {id: '@idPerfil'} },
+        getPerfis: { method: 'get',
+            url:'http://localhost:8080/server/rest/perfisacesso/perfil/:id',
+            params: {id: '@idPerfil'}, isArray:true},
+    })
+});
+
 
 services.factory('UserFactory', function ($resource) {
     return $resource('http://localhost:8080/server/rest/usuarios/:id', {}, {
         show: { method: 'GET' },
+        query: { method: 'GET', isArray:true},
         update: { method: 'PUT', params: {id: '@idUsuario'} },
         delete: { method: 'DELETE', params: {id: '@idUsuario'} }
     })
